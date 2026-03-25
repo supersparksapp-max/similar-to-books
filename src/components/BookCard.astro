@@ -65,9 +65,9 @@ const paragraphs = splitIntoParagraphs(writeup);
   class="card-shadow bg-[#F2EFE9] border border-black/5 p-8 lg:p-12 rounded-xl hover:bg-[#ebe8e2] hover:-translate-y-1 transition-all duration-300"
   id={`recommendation-${rank}`}
 >
-  <div class="flex flex-col md:flex-row md:gap-10 lg:gap-14">
+  <div class="flex flex-col md:flex-row gap-8 lg:gap-16 items-start">
     {/* Cover Image */}
-    <div class="md:w-1/4 flex-shrink-0 mb-8 md:mb-0">
+    <div class="w-full md:w-1/4 flex-shrink-0">
       {coverUrl ? (
         <>
           {/* Mobile cover - full width 16:10 */}
@@ -82,42 +82,42 @@ const paragraphs = splitIntoParagraphs(writeup);
             src={coverUrl}
             alt={`${book.title} by ${authorName} book cover`}
             loading={isLazyLoad ? "lazy" : "eager"}
-            class="hidden md:block editorial-shadow rounded-sm aspect-[2/3] object-cover w-full"
+            class="hidden md:block w-full editorial-shadow rounded-sm aspect-[2/3] object-cover"
           />
         </>
       ) : (
-        <div class="w-full aspect-[2/3] bg-surface-container rounded-sm flex items-center justify-center p-6">
-          <span class="font-serif text-on-surface-variant text-center text-sm">{book.title}</span>
+        <div class="w-full aspect-[2/3] bg-[#e5e2dc] rounded-sm flex items-center justify-center p-6">
+          <span class="font-serif text-[#404943] text-center text-sm">{book.title}</span>
         </div>
       )}
     </div>
 
     {/* Content */}
-    <div class="flex-1 min-w-0">
+    <div class="flex-grow space-y-6">
       {/* Title */}
-      <h3 class="text-3xl font-bold font-serif tracking-tight mb-4">
-        <a href={`/${book.slug}`} class="text-on-background hover:text-primary transition-colors no-underline">
+      <h3 class="text-3xl font-bold text-[#1C1917] font-serif">
+        <a href={`/${book.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
           {book.title}
         </a>
       </h3>
 
       {/* Metadata line */}
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mb-6 font-sans text-[11px] tracking-widest uppercase text-on-surface-variant">
+      <div class="font-sans text-[11px] tracking-widest uppercase flex gap-4 text-[#404943]">
         {book.author && (
-          <a href={`/author/${book.author.slug}`} class="hover:text-primary transition-colors no-underline text-on-surface-variant">
+          <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline text-[#404943]">
             {authorName}
           </a>
         )}
         {year && (
           <>
-            <span class="text-outline-variant">&middot;</span>
+            <span class="text-[#bfc9c1]">&middot;</span>
             <span>{year}</span>
           </>
         )}
         {primaryGenre && (
           <>
-            <span class="text-outline-variant">&middot;</span>
-            <a href={`/genre/${primaryGenre.slug}`} class="hover:text-primary transition-colors no-underline text-on-surface-variant">
+            <span class="text-[#bfc9c1]">&middot;</span>
+            <a href={`/genre/${primaryGenre.slug}`} class="hover:text-[#0f5238] transition-colors no-underline text-[#404943]">
               {primaryGenre.name}
             </a>
           </>
@@ -125,12 +125,12 @@ const paragraphs = splitIntoParagraphs(writeup);
       </div>
 
       {/* Why it's similar label */}
-      <p class="font-sans text-[10px] uppercase tracking-widest font-bold text-primary mb-3">
+      <p class="font-sans text-[10px] uppercase tracking-widest font-bold text-[#0f5238]">
         Why it's similar
       </p>
 
       {/* Writeup */}
-      <div class="font-serif text-lg leading-relaxed text-on-background/85 mb-8">
+      <div class="text-lg text-[#1C1917] leading-relaxed font-serif">
         {paragraphs.map((para) => (
           <p class="mb-4 last:mb-0">{para}</p>
         ))}
@@ -138,7 +138,7 @@ const paragraphs = splitIntoParagraphs(writeup);
 
       {/* Common Elements callout */}
       {commonElements && commonElements.length > 0 && (
-        <div class="border-l-3 border-blue-600 bg-blue-50/60 rounded-r-md px-6 py-5 mb-8">
+        <div class="border-l-3 border-blue-600 bg-blue-50/60 rounded-r-md px-6 py-5">
           <h4 class="font-sans text-[11px] uppercase tracking-widest font-bold text-blue-800 mb-3">
             Elements in common with {parentBookTitle}
           </h4>
@@ -156,7 +156,7 @@ const paragraphs = splitIntoParagraphs(writeup);
           href={book.amazonAffiliateLink}
           target="_blank"
           rel="nofollow noopener sponsored"
-          class="inline-block border border-primary text-primary font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-10 py-4 rounded-sm hover:bg-primary hover:text-white transition-all duration-200"
+          class="inline-flex items-center justify-center border border-[#0f5238] text-[#0f5238] font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-10 py-4 rounded-sm hover:bg-[#0f5238] hover:text-white transition-all"
         >
           Buy on Amazon
         </a>
@@ -164,17 +164,3 @@ const paragraphs = splitIntoParagraphs(writeup);
     </div>
   </div>
 </article>
-
-<style>
-  .card-shadow {
-    box-shadow:
-      0 10px 40px -10px rgba(0, 0, 0, 0.04),
-      0 0 1px 0 rgba(0, 0, 0, 0.1);
-  }
-
-  .editorial-shadow {
-    box-shadow:
-      0 4px 14px rgba(0, 0, 0, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.06);
-  }
-</style>

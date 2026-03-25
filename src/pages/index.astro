@@ -26,24 +26,24 @@ const canonicalUrl = "https://www.similartobooks.com/";
   />
 
   <!-- Hero Section -->
-  <section class="max-w-5xl mx-auto py-32 md:py-48 text-center px-4">
-    <h1 class="font-serif text-5xl md:text-7xl tracking-tighter leading-tight mb-6">
-      Find Books Similar To Your Favorites
+  <section class="max-w-5xl mx-auto px-8 py-32 md:py-48 text-center">
+    <h1 class="font-serif text-5xl md:text-7xl text-[#1C1917] leading-tight mb-8 tracking-tighter">
+      Find Books Similar<br />To Your Favorites
     </h1>
-    <p class="font-serif text-lg md:text-xl max-w-2xl mx-auto opacity-80 mb-10">
+    <p class="font-serif text-lg md:text-xl text-[#404943] max-w-2xl mx-auto leading-relaxed mb-12 opacity-80">
       Hand-picked recommendations based on the titles you already love. Discover
       your next great read by browsing curated suggestions across every genre.
     </p>
     <div class="flex flex-wrap justify-center gap-4">
       <a
         href="#recommendations"
-        class="inline-block bg-[#2d6a4f] text-white px-8 py-3.5 rounded-full font-medium hover:bg-[#0f5238] transition-colors"
+        class="inline-block bg-[#2d6a4f] text-white px-8 py-3.5 rounded-full font-sans font-medium text-sm hover:bg-[#0f5238] transition-colors"
       >
         Start Exploring
       </a>
       <a
         href="#genres"
-        class="inline-block px-8 py-3.5 rounded-full font-medium border border-on-surface-variant hover:border-[#0f5238] transition-colors"
+        class="inline-block px-8 py-3.5 rounded-full font-sans font-medium text-sm border border-[#707973] text-[#1C1917] hover:border-[#0f5238] hover:text-[#0f5238] transition-colors"
       >
         Search Archive
       </a>
@@ -52,7 +52,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
 
   <!-- Featured Book Section -->
   {featuredBook && (
-    <section class="max-w-6xl mx-auto px-4 pb-32">
+    <section class="max-w-7xl mx-auto px-8 py-20">
       <div class="grid md:grid-cols-12 gap-12 items-center">
         <div class="md:col-span-7">
           {featuredBook.coverImage ? (
@@ -62,29 +62,29 @@ const canonicalUrl = "https://www.similartobooks.com/";
                 alt={`${featuredBook.title} by ${featuredBook.author?.name ?? "Unknown Author"} book cover`}
                 width="800"
                 height="1000"
-                class="w-full rounded-2xl shadow-book transition-all duration-500 group-hover:grayscale"
+                class="w-full rounded-2xl grayscale hover:grayscale-0 transition-all duration-700"
                 loading="eager"
               />
             </a>
           ) : null}
         </div>
         <div class="md:col-span-5">
-          <span class="inline-block text-xs font-medium uppercase tracking-widest text-[#954912] mb-4">
+          <span class="inline-block font-sans text-xs font-medium uppercase tracking-widest text-[#954912] mb-4">
             Curator's Choice
           </span>
-          <h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-4">
-            <a href={`/${featuredBook.slug}`} class="hover:text-[#2d6a4f] transition-colors">
+          <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-[#1C1917] mb-4">
+            <a href={`/${featuredBook.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
               {featuredBook.title}
             </a>
           </h2>
           {featuredBook.description && (
-            <p class="text-on-surface-variant leading-relaxed mb-6 line-clamp-4">
+            <p class="font-serif text-[#404943] leading-relaxed mb-6 line-clamp-4">
               {featuredBook.description}
             </p>
           )}
           <a
             href={`/${featuredBook.slug}`}
-            class="inline-flex items-center gap-2 text-[#0f5238] font-medium hover:gap-3 transition-all"
+            class="inline-flex items-center gap-2 text-[#0f5238] font-sans font-medium hover:gap-3 transition-all"
           >
             Find similar books
             <span aria-hidden="true">&rarr;</span>
@@ -96,73 +96,66 @@ const canonicalUrl = "https://www.similartobooks.com/";
 
   <!-- Browse All Recommendations -->
   {books && books.length > 0 && (
-    <section id="recommendations" class="max-w-6xl mx-auto px-4 py-32">
-      <h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-12">
+    <section id="recommendations" class="max-w-7xl mx-auto px-8 py-32">
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-[#1C1917] mb-12">
         Browse All Recommendations
       </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
         {books.map((book: any) => (
-          <div class="bg-[#F2EFE9] rounded-2xl p-8 flex flex-col items-center text-center group hover:shadow-card transition-shadow">
+          <div class="bg-[#F2EFE9] p-10 rounded-lg transition-transform duration-500 hover:-translate-y-2">
             {book.coverImage ? (
-              <a href={`/${book.slug}`} class="mb-6 block">
+              <a href={`/${book.slug}`} class="block mb-8">
                 <img
                   src={urlFor(book.coverImage).width(300).height(450).fit("crop").url()}
                   alt={`${book.title} by ${book.author?.name ?? "Unknown Author"} book cover`}
-                  width="180"
-                  height="270"
+                  width="192"
+                  height="288"
                   loading="lazy"
-                  class="mx-auto rounded-lg shadow-book group-hover:shadow-lg transition-shadow"
+                  class="w-48 mx-auto book-shadow"
                 />
               </a>
             ) : (
-              <div class="w-[180px] h-[270px] bg-surface-container rounded-lg flex items-center justify-center mb-6 text-sm text-on-surface-variant">
-                <span>{book.title}</span>
+              <div class="w-48 h-72 mx-auto bg-[#e5e2dc] rounded-sm flex items-center justify-center mb-8">
+                <span class="font-serif text-sm text-[#404943] text-center px-4">{book.title}</span>
               </div>
             )}
-            <h3 class="font-serif text-lg font-bold mb-1 leading-snug">
-              <a href={`/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors">
+            <h3 class="font-serif text-2xl text-[#1C1917] mb-1">
+              <a href={`/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
                 {book.title}
               </a>
             </h3>
             {book.author && (
-              <p class="text-sm text-on-surface-variant italic mb-3">
-                <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors">
+              <p class="font-serif text-sm text-[#404943]/80 italic mb-0">
+                <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
                   {book.author.name}
                 </a>
               </p>
             )}
+            <hr class="border-[#bfc9c1]/20 my-6" />
             <a
               href={`/${book.slug}`}
-              class="text-sm text-[#0f5238] font-medium hover:underline"
+              class="font-sans text-sm text-[#0f5238] font-medium hover:underline"
             >
               If you loved this, try &rarr;
             </a>
           </div>
         ))}
       </div>
-      <div class="text-center mt-16">
-        <a
-          href="#genres"
-          class="inline-block bg-[#2d6a4f] text-white px-8 py-3.5 rounded-full font-medium hover:bg-[#0f5238] transition-colors"
-        >
-          See All Recommendations
-        </a>
-      </div>
     </section>
   )}
 
   <!-- Browse by Genre -->
   {genres && genres.length > 0 && (
-    <section id="genres" class="max-w-6xl mx-auto px-4 py-8">
-      <div class="bg-[#f5f3ef] rounded-3xl py-20 px-8 md:px-16">
-        <h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-10 text-center">
+    <section id="genres" class="max-w-7xl mx-auto px-8 py-8">
+      <div class="bg-[#f5f3ef] rounded-3xl py-20 px-8 md:px-16 mx-0">
+        <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-[#1C1917] mb-10 text-center">
           Browse by Genre
         </h2>
         <div class="flex flex-wrap justify-center gap-3">
           {genres.map((genre: any) => (
             <a
               href={`/genre/${genre.slug}`}
-              class="px-6 py-2.5 rounded-full bg-white border border-outline-variant text-on-surface text-sm font-medium hover:border-[#0f5238] hover:text-[#0f5238] transition-colors"
+              class="px-6 py-2.5 rounded-full bg-white border border-[#bfc9c1]/30 text-[#1C1917] font-sans text-sm hover:border-[#0f5238] hover:text-[#0f5238] transition-all"
             >
               {genre.name}
             </a>
@@ -174,15 +167,15 @@ const canonicalUrl = "https://www.similartobooks.com/";
 
   <!-- Browse by Tag -->
   {tags && tags.length > 0 && (
-    <section class="max-w-6xl mx-auto px-4 py-20">
-      <h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-10 text-center">
+    <section class="max-w-7xl mx-auto px-8 py-20">
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-[#1C1917] mb-10 text-center">
         Browse by Tag
       </h2>
       <div class="flex flex-wrap justify-center gap-2">
         {tags.map((tag: any) => (
           <a
             href={`/tag/${tag.slug}`}
-            class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-on-surface-variant text-sm hover:border-[#0f5238] hover:text-[#0f5238] transition-colors"
+            class="px-4 py-2 rounded-lg bg-[#FAF8F4] border border-[#2D6A4F]/10 text-[#1C1917] font-sans text-xs hover:border-[#0f5238] transition-all"
           >
             {tag.name}
           </a>

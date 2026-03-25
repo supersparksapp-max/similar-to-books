@@ -93,160 +93,161 @@ const authorImageUrl = book.author?.image
 
   <Breadcrumbs items={breadcrumbItems} />
 
-  {/* ------------------------------------------------------------------ */}
-  {/* Hero Section                                                        */}
-  {/* ------------------------------------------------------------------ */}
-  <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mt-8 mb-16 lg:mb-24">
-    {/* Cover Image */}
-    <div class="lg:col-span-5">
-      <div class="relative">
-        {heroImageUrl ? (
-          <img
-            src={heroImageUrl}
-            alt={`${book.title} by ${authorName} book cover`}
-            class="editorial-shadow rounded-sm w-full aspect-[2/3] object-cover"
-            loading="eager"
-          />
-        ) : (
-          <div class="w-full aspect-[2/3] bg-surface-container rounded-sm flex items-center justify-center p-8">
-            <span class="font-serif text-2xl text-on-surface-variant text-center">{book.title}</span>
-          </div>
-        )}
-        <span class="absolute top-4 left-4 bg-primary text-on-primary font-sans text-[10px] uppercase tracking-[0.2em] font-bold px-4 py-2 rounded-sm">
-          Featured Selection
-        </span>
-      </div>
-    </div>
+  <main class="max-w-7xl mx-auto px-8 lg:px-12 py-12 lg:py-16 space-y-16 lg:space-y-24">
 
-    {/* Hero Content */}
-    <div class="lg:col-span-7 flex flex-col justify-center">
-      <h1 class="text-4xl lg:text-6xl font-bold font-serif tracking-tight text-on-background mb-8 leading-[1.1]">
-        Books Like<br />{book.title}
-      </h1>
-
-      {/* Metadata bar */}
-      <div class="border-y border-outline-variant/40 py-4 mb-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-sans text-xs tracking-widest uppercase text-on-surface-variant">
-        {book.author && (
-          <div>
-            <span class="text-outline block mb-0.5">Author</span>
-            <a href={`/author/${book.author.slug}`} class="text-on-background hover:text-primary transition-colors no-underline font-medium">
-              {authorName}
-            </a>
-          </div>
-        )}
-        {year && (
-          <div>
-            <span class="text-outline block mb-0.5">Year</span>
-            <span class="text-on-background font-medium">{year}</span>
-          </div>
-        )}
-        {primaryGenre && (
-          <div>
-            <span class="text-outline block mb-0.5">Genre</span>
-            <a href={`/genre/${primaryGenre.slug}`} class="text-on-background hover:text-primary transition-colors no-underline font-medium">
-              {primaryGenre.name}
-            </a>
-          </div>
-        )}
-        {book.publisher && (
-          <div>
-            <span class="text-outline block mb-0.5">Publisher</span>
-            <span class="text-on-background font-medium">{book.publisher}</span>
-          </div>
-        )}
-      </div>
-
-      {/* Intro quote */}
-      {introQuote && (
-        <p class="font-serif text-lg lg:text-xl italic text-on-surface-variant leading-relaxed">
-          {introQuote}
-        </p>
-      )}
-    </div>
-  </section>
-
-  {/* ------------------------------------------------------------------ */}
-  {/* Divider                                                             */}
-  {/* ------------------------------------------------------------------ */}
-  <div class="border-b border-outline-variant/30 mb-16 lg:mb-24"></div>
-
-  {/* ------------------------------------------------------------------ */}
-  {/* Intro Content (Portable Text)                                       */}
-  {/* ------------------------------------------------------------------ */}
-  {book.introContent && book.introContent.length > 0 && (
-    <section class="max-w-3xl mx-auto mb-16 lg:mb-24 intro-content font-serif text-lg leading-relaxed text-on-background/85">
-      <PortableText value={book.introContent} />
-    </section>
-  )}
-
-  {/* ------------------------------------------------------------------ */}
-  {/* Recommendations Section                                             */}
-  {/* ------------------------------------------------------------------ */}
-  {sortedRecommendations.length > 0 && (
-    <section class="mb-16 lg:mb-24">
-      <div class="text-center mb-12 lg:mb-16">
-        <h2 class="font-serif text-4xl lg:text-5xl italic text-on-background mb-6">
-          Books Similar To {book.title}
-        </h2>
-        <div class="border-b border-outline-variant/30 max-w-xs mx-auto"></div>
-      </div>
-
-      <div class="space-y-8 lg:space-y-12">
-        {sortedRecommendations.map((rec: any) => (
-          <BookCard
-            book={rec.book}
-            writeup={rec.writeup}
-            rank={rec.rank ?? 0}
-            commonElements={rec.commonElements}
-            parentBookTitle={book.title}
-          />
-        ))}
-      </div>
-    </section>
-  )}
-
-  {/* ------------------------------------------------------------------ */}
-  {/* Author Bio Section                                                  */}
-  {/* ------------------------------------------------------------------ */}
-  {book.author && (
-    <section class="border-t border-outline-variant/30 pt-16 mb-16">
-      <div class="max-w-3xl mx-auto">
-        <div class="flex items-center gap-5 mb-6">
-          {authorImageUrl ? (
+    {/* ------------------------------------------------------------------ */}
+    {/* Hero Section                                                        */}
+    {/* ------------------------------------------------------------------ */}
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+      {/* Cover Image */}
+      <div class="lg:col-span-5">
+        <div class="relative">
+          {heroImageUrl ? (
             <img
-              src={authorImageUrl}
-              alt={authorName}
-              class="w-24 h-24 lg:w-32 lg:h-32 rounded-full object-cover grayscale"
-              loading="lazy"
+              src={heroImageUrl}
+              alt={`${book.title} by ${authorName} book cover`}
+              class="editorial-shadow rounded-sm w-full aspect-[2/3] object-cover"
+              loading="eager"
             />
           ) : (
-            <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0">
-              <span class="font-serif text-2xl text-on-surface-variant">
-                {authorName.charAt(0)}
-              </span>
+            <div class="w-full aspect-[2/3] bg-[#e5e2dc] rounded-sm flex items-center justify-center p-8">
+              <span class="font-serif text-2xl text-[#404943] text-center">{book.title}</span>
             </div>
           )}
-          <div>
-            <h3 class="text-2xl font-bold italic font-serif text-on-background mb-1">
-              {authorName}
-            </h3>
-            {book.author.bio && (
-              <p class="font-sans text-sm text-on-surface-variant leading-relaxed max-w-xl">
-                {book.author.bio}
-              </p>
-            )}
-          </div>
+          <span class="absolute bottom-4 right-4 bg-[#0f5238] text-white font-sans text-[10px] uppercase tracking-[0.2em] font-bold px-4 py-2 rounded-sm">
+            Featured Selection
+          </span>
+        </div>
+      </div>
+
+      {/* Hero Content */}
+      <div class="lg:col-span-7 flex flex-col justify-center">
+        <h1 class="text-4xl lg:text-6xl font-bold text-[#1C1917] leading-tight tracking-tight font-serif mb-8">
+          Books Like {book.title}
+        </h1>
+
+        {/* Metadata bar */}
+        <div class="flex flex-wrap gap-y-2 gap-x-6 font-sans text-xs tracking-widest uppercase text-[#404943]/80 border-y border-[#bfc9c1]/20 py-4 mb-8">
+          {book.author && (
+            <span class="flex items-center gap-2">
+              <span class="font-semibold text-[#1C1917]">Author</span>
+              <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
+                {authorName}
+              </a>
+            </span>
+          )}
+          {year && (
+            <span class="flex items-center gap-2">
+              <span class="font-semibold text-[#1C1917]">Year</span>
+              {year}
+            </span>
+          )}
+          {primaryGenre && (
+            <span class="flex items-center gap-2">
+              <span class="font-semibold text-[#1C1917]">Genre</span>
+              <a href={`/genre/${primaryGenre.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
+                {primaryGenre.name}
+              </a>
+            </span>
+          )}
+          {book.publisher && (
+            <span class="flex items-center gap-2">
+              <span class="font-semibold text-[#1C1917]">Publisher</span>
+              {book.publisher}
+            </span>
+          )}
         </div>
 
-        <a
-          href={`/author/${book.author.slug}`}
-          class="inline-block border border-primary text-primary font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3 rounded-sm hover:bg-primary hover:text-white transition-all duration-200"
-        >
-          Explore More Books
-        </a>
+        {/* Intro quote */}
+        {introQuote && (
+          <p class="text-lg lg:text-xl text-[#404943] leading-relaxed max-w-2xl italic opacity-90 font-serif">
+            {introQuote}
+          </p>
+        )}
       </div>
     </section>
-  )}
+
+    {/* ------------------------------------------------------------------ */}
+    {/* Divider                                                             */}
+    {/* ------------------------------------------------------------------ */}
+    <div class="w-full border-b border-[#bfc9c1]/30"></div>
+
+    {/* ------------------------------------------------------------------ */}
+    {/* Intro Content (Portable Text)                                       */}
+    {/* ------------------------------------------------------------------ */}
+    {book.introContent && book.introContent.length > 0 && (
+      <section class="max-w-3xl mx-auto intro-content font-serif text-lg leading-relaxed text-[#404943]">
+        <PortableText value={book.introContent} />
+      </section>
+    )}
+
+    {/* ------------------------------------------------------------------ */}
+    {/* Recommendations Section                                             */}
+    {/* ------------------------------------------------------------------ */}
+    {sortedRecommendations.length > 0 && (
+      <section>
+        <h2 class="font-serif text-4xl lg:text-5xl italic text-[#1C1917] max-w-2xl text-center mx-auto mb-12 lg:mb-16">
+          Books Similar To {book.title}
+        </h2>
+
+        <div class="space-y-10 lg:space-y-12">
+          {sortedRecommendations.map((rec: any) => (
+            <BookCard
+              book={rec.book}
+              writeup={rec.writeup}
+              rank={rec.rank ?? 0}
+              commonElements={rec.commonElements}
+              parentBookTitle={book.title}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* ------------------------------------------------------------------ */}
+    {/* Author Bio Section                                                  */}
+    {/* ------------------------------------------------------------------ */}
+    {book.author && (
+      <section class="border-t border-[#bfc9c1]/20 pt-16">
+        <div class="max-w-3xl mx-auto">
+          <div class="flex items-center gap-5 mb-6">
+            {authorImageUrl ? (
+              <img
+                src={authorImageUrl}
+                alt={authorName}
+                class="w-24 h-24 lg:w-32 lg:h-32 rounded-full object-cover grayscale"
+                loading="lazy"
+              />
+            ) : (
+              <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full bg-[#e5e2dc] flex items-center justify-center flex-shrink-0">
+                <span class="font-serif text-2xl text-[#404943]">
+                  {authorName.charAt(0)}
+                </span>
+              </div>
+            )}
+            <div>
+              <h3 class="text-2xl font-bold italic font-serif text-[#1C1917] mb-1">
+                {authorName}
+              </h3>
+              {book.author.bio && (
+                <p class="font-sans text-sm text-[#404943] leading-relaxed max-w-xl">
+                  {book.author.bio}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <a
+            href={`/author/${book.author.slug}`}
+            class="inline-block border border-[#0f5238] text-[#0f5238] font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3 rounded-sm hover:bg-[#0f5238] hover:text-white transition-all duration-200"
+          >
+            Explore More Books
+          </a>
+        </div>
+      </section>
+    )}
+
+  </main>
 
   {/* ------------------------------------------------------------------ */}
   {/* JSON-LD                                                             */}
@@ -262,12 +263,6 @@ const authorImageUrl = book.author?.image
 </BaseLayout>
 
 <style>
-  .editorial-shadow {
-    box-shadow:
-      0 4px 14px rgba(0, 0, 0, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.06);
-  }
-
   .intro-content :global(p) {
     margin-bottom: 1.5rem;
   }
@@ -277,13 +272,13 @@ const authorImageUrl = book.author?.image
   }
 
   .intro-content :global(a) {
-    color: var(--color-primary);
+    color: #0f5238;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
   .intro-content :global(a:hover) {
-    color: var(--color-primary-container);
+    color: #2d6a4f;
   }
 
   .intro-content :global(strong) {
@@ -295,10 +290,10 @@ const authorImageUrl = book.author?.image
   }
 
   .intro-content :global(blockquote) {
-    border-left: 3px solid var(--color-outline-variant);
+    border-left: 3px solid #bfc9c1;
     padding-left: 1.5rem;
     margin: 2rem 0;
     font-style: italic;
-    color: var(--color-on-surface-variant);
+    color: #404943;
   }
 </style>

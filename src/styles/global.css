@@ -1,50 +1,38 @@
 @import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
-
 @import "tailwindcss";
-
-@theme {
-  --color-bg: #FAF8F4;
-  --color-surface: #F2EFE9;
-  --color-primary: #0f5238;
-  --color-primary-container: #2d6a4f;
-  --color-secondary: #954912;
-  --color-secondary-container: #fd9b5e;
-  --color-on-background: #1b1c1a;
-  --color-on-surface: #1b1c1a;
-  --color-on-surface-variant: #404943;
-  --color-outline: #707973;
-  --color-outline-variant: #bfc9c1;
-  --color-on-primary: #ffffff;
-  --color-surface-container: #efeeea;
-  --color-surface-container-low: #f5f3ef;
-
-  --font-serif: 'Libre Baskerville', serif;
-  --font-sans: 'Inter', sans-serif;
-
-  --shadow-editorial: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-book: 0 4px 14px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.04);
-}
-
-/* -----------------------------------------------------------------------
-   Base Styles
-   ----------------------------------------------------------------------- */
-
-html {
-  scroll-behavior: smooth;
-}
 
 body {
   background-color: #FAF8F4;
   color: #1C1917;
+  font-family: 'Libre Baskerville', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+.editorial-shadow {
+  box-shadow: 0 8px 32px -4px rgba(28, 25, 23, 0.06);
+}
+
+.card-shadow {
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.04), 0 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.book-shadow {
+  box-shadow: 12px 16px 32px -8px rgba(28, 25, 23, 0.12);
+}
+
 ::selection {
-  background-color: rgba(45, 106, 79, 0.2);
-  color: #1b1c1a;
+  background-color: rgba(177, 240, 206, 0.4);
+  color: #002114;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 img {
