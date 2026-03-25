@@ -10,6 +10,11 @@ const tags = await getAllTags();
 
 const featuredBook = books && books.length > 0 ? books[0] : null;
 
+// Pick 5 books with covers for the hero fan arrangement
+const fanBooks = (books ?? [])
+  .filter((b: any) => b.coverImage)
+  .slice(0, 5);
+
 const seoTitle = "Similar To Books - Find Your Next Great Read";
 const seoDescription =
   "Discover books similar to your favorites. Browse curated recommendations by genre, author, and theme to find your next great read.";
@@ -26,120 +31,186 @@ const canonicalUrl = "https://www.similartobooks.com/";
   />
 
   <!-- Hero Section -->
-  <section class="max-w-5xl mx-auto px-8 py-32 md:py-48 text-center">
-    <h1 class="font-serif text-5xl md:text-7xl text-[#1C1917] leading-tight mb-8 tracking-tighter">
-      Find Books Similar<br />To Your Favorites
-    </h1>
-    <p class="font-serif text-lg md:text-xl text-[#404943] max-w-2xl mx-auto leading-relaxed mb-12 opacity-80">
-      Hand-picked recommendations based on the titles you already love. Discover
-      your next great read by browsing curated suggestions across every genre.
-    </p>
-    <div class="flex flex-wrap justify-center gap-4">
-      <a
-        href="#recommendations"
-        class="inline-block bg-[#2d6a4f] text-white px-8 py-3.5 rounded-full font-sans font-medium text-sm hover:bg-[#0f5238] transition-colors"
-      >
-        Start Exploring
-      </a>
-      <a
-        href="#genres"
-        class="inline-block px-8 py-3.5 rounded-full font-sans font-medium text-sm border border-[#707973] text-[#1C1917] hover:border-[#0f5238] hover:text-[#0f5238] transition-colors"
-      >
-        Search Archive
-      </a>
+  <section class="relative pt-24 pb-48 overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center px-6 mb-16">
+      <h1 class="text-5xl md:text-7xl font-serif italic mb-6 leading-[1.1] tracking-tight text-[#1C1917]">
+        Find Books Similar To Your Favorites
+      </h1>
+      <p class="font-sans text-lg text-[#404943] font-light tracking-wide max-w-xl mx-auto mb-10">
+        A thoughtfully curated engine for the discerning reader. Discover your next quiet afternoon through aesthetic and thematic resonance.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+        <a
+          href="#recommendations"
+          class="bg-[#2d6a4f] text-white px-10 py-4 rounded-md font-sans text-sm tracking-widest uppercase font-medium hover:opacity-90 transition-opacity"
+        >
+          Start Exploring
+        </a>
+        <a
+          href="#genres"
+          class="border border-[#bfc9c1] text-[#1C1917] px-10 py-4 rounded-md font-sans text-sm tracking-widest uppercase font-medium hover:bg-[#f5f3ef] transition-colors"
+        >
+          Search Archive
+        </a>
+      </div>
     </div>
+
+    <!-- Book Fan Arrangement -->
+    {fanBooks.length >= 5 && (
+      <div class="relative w-full max-w-6xl mx-auto h-[400px] mt-12 hidden md:flex justify-center items-end" style="perspective: 1000px;">
+        <a href={`/${fanBooks[0].slug}`} class="absolute transform -translate-x-64 translate-y-8 -rotate-[25deg] z-10">
+          <img
+            src={urlFor(fanBooks[0].coverImage).width(384).height(576).fit("crop").url()}
+            alt={`${fanBooks[0].title} by ${fanBooks[0].author?.name ?? ""} book cover`}
+            class="w-48 h-72 object-cover rounded-sm book-shadow grayscale-[20%] hover:grayscale-0 transition-all duration-500"
+            loading="eager"
+          />
+        </a>
+        <a href={`/${fanBooks[1].slug}`} class="absolute transform -translate-x-32 translate-y-2 -rotate-[12deg] z-20">
+          <img
+            src={urlFor(fanBooks[1].coverImage).width(384).height(576).fit("crop").url()}
+            alt={`${fanBooks[1].title} by ${fanBooks[1].author?.name ?? ""} book cover`}
+            class="w-48 h-72 object-cover rounded-sm book-shadow hover:grayscale-0 transition-all duration-500"
+            loading="eager"
+          />
+        </a>
+        <a href={`/${fanBooks[2].slug}`} class="absolute transform translate-y-0 rotate-0 z-30">
+          <img
+            src={urlFor(fanBooks[2].coverImage).width(416).height(640).fit("crop").url()}
+            alt={`${fanBooks[2].title} by ${fanBooks[2].author?.name ?? ""} book cover`}
+            class="w-52 h-80 object-cover rounded-sm book-shadow hover:grayscale-0 transition-all duration-500"
+            loading="eager"
+          />
+        </a>
+        <a href={`/${fanBooks[3].slug}`} class="absolute transform translate-x-32 translate-y-2 rotate-[12deg] z-20">
+          <img
+            src={urlFor(fanBooks[3].coverImage).width(384).height(576).fit("crop").url()}
+            alt={`${fanBooks[3].title} by ${fanBooks[3].author?.name ?? ""} book cover`}
+            class="w-48 h-72 object-cover rounded-sm book-shadow hover:grayscale-0 transition-all duration-500"
+            loading="eager"
+          />
+        </a>
+        <a href={`/${fanBooks[4].slug}`} class="absolute transform translate-x-64 translate-y-8 rotate-[25deg] z-10">
+          <img
+            src={urlFor(fanBooks[4].coverImage).width(384).height(576).fit("crop").url()}
+            alt={`${fanBooks[4].title} by ${fanBooks[4].author?.name ?? ""} book cover`}
+            class="w-48 h-72 object-cover rounded-sm book-shadow grayscale-[10%] hover:grayscale-0 transition-all duration-500"
+            loading="eager"
+          />
+        </a>
+      </div>
+    )}
+
+    <!-- Mobile: simple horizontal scroll of covers -->
+    {fanBooks.length >= 3 && (
+      <div class="flex md:hidden gap-4 overflow-x-auto px-6 mt-8 pb-4 snap-x snap-mandatory">
+        {fanBooks.map((book: any) => (
+          <a href={`/${book.slug}`} class="flex-shrink-0 snap-center">
+            <img
+              src={urlFor(book.coverImage).width(256).height(384).fit("crop").url()}
+              alt={`${book.title} book cover`}
+              class="w-32 h-48 object-cover rounded-sm book-shadow"
+              loading="eager"
+            />
+          </a>
+        ))}
+      </div>
+    )}
   </section>
 
-  <!-- Featured Book Section -->
+  <!-- Curator's Choice Section -->
   {featuredBook && (
-    <section class="max-w-7xl mx-auto px-8 py-20">
-      <div class="grid md:grid-cols-12 gap-12 items-center">
-        <div class="md:col-span-7">
+    <section class="bg-[#f5f3ef] py-32">
+      <div class="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-20 items-center">
+        <div class="relative aspect-[3/4] overflow-hidden rounded-lg">
           {featuredBook.coverImage ? (
-            <a href={`/${featuredBook.slug}`} class="block group">
+            <a href={`/${featuredBook.slug}`} class="block">
               <img
-                src={urlFor(featuredBook.coverImage).width(800).height(1000).fit("crop").url()}
-                alt={`${featuredBook.title} by ${featuredBook.author?.name ?? "Unknown Author"} book cover`}
-                width="800"
-                height="1000"
-                class="w-full rounded-2xl grayscale hover:grayscale-0 transition-all duration-700"
-                loading="eager"
+                src={urlFor(featuredBook.coverImage).width(800).height(1066).fit("crop").url()}
+                alt={`${featuredBook.title} by ${featuredBook.author?.name ?? ""} book cover`}
+                class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                loading="lazy"
               />
             </a>
-          ) : null}
+          ) : (
+            <div class="w-full h-full bg-[#efeeea] flex items-center justify-center">
+              <span class="font-serif text-2xl text-[#404943]">{featuredBook.title}</span>
+            </div>
+          )}
         </div>
-        <div class="md:col-span-5">
-          <span class="inline-block font-sans text-xs font-medium uppercase tracking-widest text-[#954912] mb-4">
-            Curator's Choice
-          </span>
-          <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-[#1C1917] mb-4">
+        <div class="flex flex-col gap-8">
+          <span class="font-sans text-[10px] tracking-[0.3em] uppercase font-semibold text-[#0f5238]">Curator's Choice</span>
+          <h2 class="text-4xl md:text-5xl font-serif italic text-[#1C1917] leading-tight">
             <a href={`/${featuredBook.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
-              {featuredBook.title}
+              Books Like {featuredBook.title}
             </a>
           </h2>
-          {featuredBook.description && (
-            <p class="font-serif text-[#404943] leading-relaxed mb-6 line-clamp-4">
-              {featuredBook.description}
-            </p>
-          )}
-          <a
-            href={`/${featuredBook.slug}`}
-            class="inline-flex items-center gap-2 text-[#0f5238] font-sans font-medium hover:gap-3 transition-all"
-          >
-            Find similar books
-            <span aria-hidden="true">&rarr;</span>
-          </a>
+          <div class="space-y-6">
+            {featuredBook.description && (
+              <p class="font-serif text-lg leading-relaxed text-[#404943]">
+                {featuredBook.description}
+              </p>
+            )}
+          </div>
+          <div>
+            <a
+              href={`/${featuredBook.slug}`}
+              class="font-sans text-xs tracking-widest uppercase font-bold text-[#0f5238] inline-flex items-center gap-2 group"
+            >
+              Read the Curation
+              <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
   )}
 
-  <!-- Browse All Recommendations -->
+  <!-- Browse Recommendations Grid -->
   {books && books.length > 0 && (
-    <section id="recommendations" class="max-w-7xl mx-auto px-8 py-32">
-      <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-[#1C1917] mb-12">
-        Browse All Recommendations
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {books.map((book: any) => (
-          <div class="bg-[#F2EFE9] p-10 rounded-lg transition-transform duration-500 hover:-translate-y-2">
-            {book.coverImage ? (
-              <a href={`/${book.slug}`} class="block mb-8">
-                <img
-                  src={urlFor(book.coverImage).width(300).height(450).fit("crop").url()}
-                  alt={`${book.title} by ${book.author?.name ?? "Unknown Author"} book cover`}
-                  width="192"
-                  height="288"
-                  loading="lazy"
-                  class="w-48 mx-auto book-shadow"
-                />
-              </a>
-            ) : (
-              <div class="w-48 h-72 mx-auto bg-[#e5e2dc] rounded-sm flex items-center justify-center mb-8">
-                <span class="font-serif text-sm text-[#404943] text-center px-4">{book.title}</span>
-              </div>
-            )}
-            <h3 class="font-serif text-2xl text-[#1C1917] mb-1">
-              <a href={`/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
-                {book.title}
-              </a>
-            </h3>
-            {book.author && (
-              <p class="font-serif text-sm text-[#404943]/80 italic mb-0">
-                <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
-                  {book.author.name}
-                </a>
-              </p>
-            )}
-            <hr class="border-[#bfc9c1]/20 my-6" />
-            <a
-              href={`/${book.slug}`}
-              class="font-sans text-sm text-[#0f5238] font-medium hover:underline"
-            >
-              If you loved this, try &rarr;
-            </a>
+    <section id="recommendations" class="py-32">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div>
+            <h3 class="text-3xl font-serif text-[#1C1917] mb-2">Browse All Recommendations</h3>
+            <p class="font-sans text-sm text-[#404943] tracking-wide">Hand-picked selections for every literary temperament.</p>
           </div>
-        ))}
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          {books.map((book: any) => (
+            <div class="group">
+              <a href={`/${book.slug}`} class="block">
+                <div class="bg-[#F2EFE9] p-8 aspect-[2/3] mb-6 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-2">
+                  {book.coverImage ? (
+                    <img
+                      src={urlFor(book.coverImage).width(400).height(600).fit("crop").url()}
+                      alt={`${book.title} by ${book.author?.name ?? ""} book cover`}
+                      class="w-full h-full object-cover book-shadow"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span class="font-serif text-sm text-[#404943] text-center px-4">{book.title}</span>
+                  )}
+                </div>
+              </a>
+              {book.genres && book.genres.length > 0 && (
+                <span class="font-sans text-[9px] tracking-[0.2em] uppercase font-bold text-[#0f5238] mb-2 block">
+                  {book.genres.map((g: any) => g.name).join(" / ")}
+                </span>
+              )}
+              <h4 class="font-serif text-xl text-[#1C1917] mb-1">
+                <a href={`/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
+              </h4>
+              {book.author && (
+                <p class="font-sans text-xs text-[#404943] tracking-wider font-light">
+                  <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
+                    {book.author.name}
+                  </a>
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )}
@@ -147,7 +218,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
   <!-- Browse by Genre -->
   {genres && genres.length > 0 && (
     <section id="genres" class="max-w-7xl mx-auto px-8 py-8">
-      <div class="bg-[#f5f3ef] rounded-3xl py-20 px-8 md:px-16 mx-0">
+      <div class="bg-[#f5f3ef] rounded-3xl py-20 px-8 md:px-16">
         <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-[#1C1917] mb-10 text-center">
           Browse by Genre
         </h2>
