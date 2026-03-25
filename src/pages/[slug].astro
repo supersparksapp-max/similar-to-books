@@ -89,6 +89,8 @@ const itemListSchema = generateItemListSchema(sortedRecommendations, book);
             book={rec.book}
             writeup={rec.writeup}
             rank={rec.rank ?? 0}
+            commonElements={rec.commonElements}
+            parentBookTitle={book.title}
           />
         ))}
       </section>

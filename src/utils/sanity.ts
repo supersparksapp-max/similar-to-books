@@ -56,6 +56,7 @@ const bookBySlugQuery = defineQuery(`
       _key,
       writeup,
       rank,
+      commonElements,
       book->{
         _id,
         title,

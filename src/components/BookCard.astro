@@ -24,9 +24,11 @@ interface Props {
   book: BookData;
   writeup: string;
   rank: number;
+  commonElements?: string[];
+  parentBookTitle?: string;
 }
 
-const { book, writeup, rank } = Astro.props;
+const { book, writeup, rank, commonElements, parentBookTitle } = Astro.props;
 
 const coverUrl = book.coverImage
   ? urlFor(book.coverImage).width(300).height(450).fit("crop").url()
@@ -105,6 +107,19 @@ const paragraphs = splitIntoParagraphs(writeup);
         <p>{para}</p>
       ))}
     </div>
+
+    {
+      commonElements && commonElements.length > 0 && (
+        <div class="book-card__common">
+          <h4>Elements in common with {parentBookTitle}:</h4>
+          <ul>
+            {commonElements.map((element) => (
+              <li>{element}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
 
     <div class="book-card__actions">
       <a href={`/${book.slug}`} class="btn btn--primary">
@@ -243,6 +258,39 @@ const paragraphs = splitIntoParagraphs(writeup);
     line-height: 1.65;
     color: #374151;
     font-size: 0.95rem;
+  }
+
+  .book-card__common {
+    margin-bottom: 1rem;
+    padding: 0.875rem 1rem;
+    background: #f0f7ff;
+    border-left: 3px solid #2563eb;
+    border-radius: 0 0.375rem 0.375rem 0;
+  }
+
+  .book-card__common h4 {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1e40af;
+    font-family: var(--font-heading);
+  }
+
+  .book-card__common ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    list-style-type: disc;
+  }
+
+  .book-card__common li {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #374151;
+    margin-bottom: 0.25rem;
+  }
+
+  .book-card__common li:last-child {
+    margin-bottom: 0;
   }
 
   .book-card__writeup p {
