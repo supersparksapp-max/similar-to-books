@@ -16,7 +16,7 @@ const schemaItems = items.map((item) => ({
   name: item.label,
   url: item.href.startsWith("http")
     ? item.href
-    : `https://similartobooks.com${item.href}`,
+    : `https://www.similartobooks.com${item.href}`,
 }));
 
 const breadcrumbSchema = generateBreadcrumbSchema(schemaItems);

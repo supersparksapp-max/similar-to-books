@@ -38,7 +38,7 @@ const seoTitle =
 const seoDescription =
   book.seoDescription ??
   `Looking for books like ${book.title} by ${authorName}? Here are ${recCount} books similar to ${book.title} that share the same themes, style, and appeal.`;
-const canonicalUrl = `https://similartobooks.com/${book.slug}`;
+const canonicalUrl = `https://www.similartobooks.com/${book.slug}`;
 const ogImage = book.coverImage
   ? urlFor(book.coverImage).width(1200).height(630).fit("crop").url()
   : undefined;

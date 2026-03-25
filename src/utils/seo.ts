@@ -54,7 +54,7 @@ export function generateBookSchema(book: BookForSchema) {
     "@type": "Book",
     name: book.title,
     description: book.description ?? "",
-    url: `https://similartobooks.com/${book.slug}`,
+    url: `https://www.similartobooks.com/${book.slug}`,
   };
 
   if (book.isbn) {
@@ -65,7 +65,7 @@ export function generateBookSchema(book: BookForSchema) {
     schema.author = {
       "@type": "Person",
       name: book.author.name,
-      url: `https://similartobooks.com/author/${book.author.slug}`,
+      url: `https://www.similartobooks.com/author/${book.author.slug}`,
     };
   }
 
@@ -121,7 +121,7 @@ export function generateItemListSchema(
       item: {
         "@type": "Book",
         name: rec.book.title,
-        url: `https://similartobooks.com/${rec.book.slug}`,
+        url: `https://www.similartobooks.com/${rec.book.slug}`,
         description: rec.writeup ?? rec.book.description ?? "",
         ...(rec.book.author
           ? {

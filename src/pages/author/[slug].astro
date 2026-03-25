@@ -25,7 +25,7 @@ const seoTitle =
 const seoDescription =
   author.seoDescription ??
   `Discover books by ${author.name} and find similar recommendations for every title.`;
-const canonicalUrl = `https://similartobooks.com/author/${author.slug}`;
+const canonicalUrl = `https://www.similartobooks.com/author/${author.slug}`;
 const ogImage = author.image
   ? urlFor(author.image).width(1200).height(630).fit("crop").url()
   : undefined;

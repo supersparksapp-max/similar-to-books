@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://similartobooks.com',
+  site: 'https://www.similartobooks.com',
   output: 'static',
   adapter: cloudflare(),
   integrations: [
