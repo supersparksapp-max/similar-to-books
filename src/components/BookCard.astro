@@ -113,11 +113,11 @@ const paragraphs = splitIntoParagraphs(writeup);
             {year}
           </span>
         )}
-        {primaryGenre && (
-          <a href={`/genre/${primaryGenre.slug}`} class="inline-block px-4 py-1.5 rounded bg-[#e5e2dc] font-sans text-[11px] tracking-widest uppercase text-[#404943] hover:text-[#0f5238] transition-colors no-underline">
-            {primaryGenre.name}
+        {book.genres && book.genres.map((genre: any) => (
+          <a href={`/genre/${genre.slug}`} class="inline-block px-4 py-1.5 rounded bg-[#e5e2dc] font-sans text-[11px] tracking-widest uppercase text-[#404943] hover:text-[#0f5238] transition-colors no-underline">
+            {genre.name}
           </a>
-        )}
+        ))}
       </div>
 
       {/* Why it's similar label */}
