@@ -1,399 +1,54 @@
-/* -----------------------------------------------------------------------
-   CSS Custom Properties
-   ----------------------------------------------------------------------- */
-:root {
-  --color-bg: #fdfbf7;
-  --color-surface: #ffffff;
-  --color-primary: #6b4226;
-  --color-primary-dark: #4a2e1a;
-  --color-primary-light: #f4ece4;
-  --color-accent: #c0763c;
-  --color-text: #2d2419;
-  --color-text-secondary: #6b5e52;
-  --color-text-muted: #9b9086;
-  --color-border: #e8e0d6;
-  --color-border-light: #f0ebe4;
-  --color-amazon: #ff9900;
-  --color-amazon-dark: #e68a00;
-  --color-link: #6b4226;
-  --color-link-hover: #4a2e1a;
-  --font-body: "Georgia", "Times New Roman", serif;
-  --font-heading: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --max-width: 900px;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #FAF8F4;
+  --color-surface: #F2EFE9;
+  --color-primary: #0f5238;
+  --color-primary-container: #2d6a4f;
+  --color-secondary: #954912;
+  --color-secondary-container: #fd9b5e;
+  --color-on-background: #1b1c1a;
+  --color-on-surface: #1b1c1a;
+  --color-on-surface-variant: #404943;
+  --color-outline: #707973;
+  --color-outline-variant: #bfc9c1;
+  --color-on-primary: #ffffff;
+  --color-surface-container: #efeeea;
+  --color-surface-container-low: #f5f3ef;
+
+  --font-serif: 'Libre Baskerville', serif;
+  --font-sans: 'Inter', sans-serif;
+
+  --shadow-editorial: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-book: 0 4px 14px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.04);
 }
 
 /* -----------------------------------------------------------------------
-   Reset & Base
+   Base Styles
    ----------------------------------------------------------------------- */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
 html {
-  font-size: 100%;
-  -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-body);
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: var(--color-text);
-  background: var(--color-bg);
+  background-color: #FAF8F4;
+  color: #1C1917;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: rgba(45, 106, 79, 0.2);
+  color: #1b1c1a;
 }
 
 img {
   display: block;
   max-width: 100%;
   height: auto;
-}
-
-/* -----------------------------------------------------------------------
-   Container
-   ----------------------------------------------------------------------- */
-.container {
-  width: 100%;
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding-inline: 1.25rem;
-}
-
-/* -----------------------------------------------------------------------
-   Typography
-   ----------------------------------------------------------------------- */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading);
-  line-height: 1.25;
-  color: var(--color-text);
-}
-
-h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.75rem;
-}
-
-h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-top: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.4rem;
-}
-
-p {
-  margin-bottom: 1rem;
-}
-
-/* -----------------------------------------------------------------------
-   Links
-   ----------------------------------------------------------------------- */
-a {
-  color: var(--color-link);
-  text-decoration-color: var(--color-border);
-  text-underline-offset: 2px;
-  transition: color 0.15s ease, text-decoration-color 0.15s ease;
-}
-
-a:hover {
-  color: var(--color-link-hover);
-  text-decoration-color: var(--color-link-hover);
-}
-
-/* -----------------------------------------------------------------------
-   Breadcrumbs
-   ----------------------------------------------------------------------- */
-.breadcrumbs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  list-style: none;
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  margin-bottom: 1.5rem;
-  padding: 0;
-}
-
-.breadcrumbs li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.breadcrumbs li + li::before {
-  content: "/";
-  color: var(--color-border);
-}
-
-.breadcrumbs a {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-}
-
-.breadcrumbs a:hover {
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-
-/* -----------------------------------------------------------------------
-   Book Card (recommendation card)
-   ----------------------------------------------------------------------- */
-.book-card {
-  display: flex;
-  gap: 1.5rem;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--color-border-light);
-}
-
-.book-card:last-child {
-  border-bottom: none;
-}
-
-.book-card-image {
-  flex-shrink: 0;
-  width: 120px;
-}
-
-.book-card-image img {
-  width: 100%;
-  border-radius: var(--radius-sm);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.book-card-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.book-card-rank {
-  font-family: var(--font-heading);
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-accent);
-  margin-bottom: 0.25rem;
-}
-
-.book-card-title {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 0.15rem;
-  line-height: 1.3;
-}
-
-.book-card-title a {
-  color: var(--color-text);
-  text-decoration: none;
-}
-
-.book-card-title a:hover {
-  color: var(--color-primary);
-}
-
-.book-card-author {
-  font-size: 0.95rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 0.6rem;
-}
-
-.book-card-author a {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-}
-
-.book-card-author a:hover {
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-
-.book-card-description {
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: var(--color-text-secondary);
-  margin-bottom: 0.75rem;
-}
-
-.book-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-/* -----------------------------------------------------------------------
-   Pills (genres, tags)
-   ----------------------------------------------------------------------- */
-.pill {
-  display: inline-block;
-  font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1;
-  padding: 0.3rem 0.65rem;
-  border-radius: 9999px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.pill:hover {
-  background: var(--color-primary);
-  color: #fff;
-  text-decoration: none;
-}
-
-.pill-outline {
-  background: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
-}
-
-.pill-outline:hover {
-  border-color: var(--color-primary);
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-}
-
-/* -----------------------------------------------------------------------
-   Amazon Button
-   ----------------------------------------------------------------------- */
-.btn-amazon {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--font-heading);
-  font-size: 0.9rem;
-  font-weight: 600;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: var(--radius-md);
-  background: var(--color-amazon);
-  color: #111;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease;
-}
-
-.btn-amazon:hover {
-  background: var(--color-amazon-dark);
-  color: #111;
-  text-decoration: none;
-  transform: translateY(-1px);
-}
-
-.btn-amazon:active {
-  transform: translateY(0);
-}
-
-/* -----------------------------------------------------------------------
-   Page-level helpers
-   ----------------------------------------------------------------------- */
-.page-header {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.page-header p {
-  font-size: 1.05rem;
-  color: var(--color-text-secondary);
-  max-width: 640px;
-}
-
-.section-label {
-  font-family: var(--font-heading);
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-text-muted);
-  margin-bottom: 0.5rem;
-}
-
-/* Grid for genre / tag / series listing pages */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
-}
-
-.card-grid-item {
-  padding: 1.25rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.card-grid-item:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 2px 12px rgba(107, 66, 38, 0.08);
-  text-decoration: none;
-}
-
-.card-grid-item h3 {
-  margin-top: 0;
-  font-size: 1.1rem;
-}
-
-.card-grid-item p {
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 0;
-}
-
-/* -----------------------------------------------------------------------
-   Responsive: mobile
-   ----------------------------------------------------------------------- */
-@media (max-width: 640px) {
-  h1 {
-    font-size: 1.6rem;
-  }
-
-  h2 {
-    font-size: 1.3rem;
-  }
-
-  .book-card {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .book-card-image {
-    width: 100px;
-  }
-
-  .btn-amazon {
-    width: 100%;
-    justify-content: center;
-  }
 }

@@ -1,52 +1,73 @@
 ---
+const pathname = Astro.url.pathname;
+
+const navLinks = [
+  { label: "Curations", href: "/", active: pathname === "/" },
+  { label: "Browse Genres", href: "/genre", active: pathname.startsWith("/genre") },
+  { label: "Authors", href: "/author", active: pathname.startsWith("/author") },
+  { label: "About", href: "/about", active: pathname === "/about" },
+];
 ---
 
-<header class="site-header">
-  <div class="container header-inner">
-    <a href="/" class="site-logo">Similar To Books</a>
-    <nav class="site-nav" aria-label="Main navigation">
-      <a href="/genres">Browse Genres</a>
+<header class="sticky top-0 z-50 bg-[#FAF8F4] border-b border-outline-variant/30">
+  <div class="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
+    <a href="/" class="font-serif italic text-2xl text-[#1C1917] no-underline hover:text-primary-container transition-colors">
+      Similar To Books
+    </a>
+
+    {/* Desktop nav */}
+    <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            "font-sans uppercase tracking-widest text-xs no-underline transition-colors py-1",
+            link.active
+              ? "text-primary-container border-b-2 border-primary-container font-medium"
+              : "text-on-surface-variant hover:text-primary-container",
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
     </nav>
+
+    {/* Mobile menu button */}
+    <button
+      class="md:hidden text-on-surface-variant hover:text-on-surface transition-colors"
+      aria-label="Open menu"
+      id="mobile-menu-btn"
+    >
+      <span class="material-symbols-outlined text-[28px]">menu</span>
+    </button>
   </div>
+
+  {/* Mobile nav drawer */}
+  <nav
+    id="mobile-menu"
+    class="hidden md:hidden border-t border-outline-variant/30 bg-[#FAF8F4] px-8 pb-6"
+    aria-label="Mobile navigation"
+  >
+    {navLinks.map((link) => (
+      <a
+        href={link.href}
+        class:list={[
+          "block py-3 font-sans uppercase tracking-widest text-xs no-underline border-b border-outline-variant/20",
+          link.active
+            ? "text-primary-container font-medium"
+            : "text-on-surface-variant hover:text-primary-container",
+        ]}
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
 </header>
 
-<style>
-  .site-header {
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-bg);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .site-logo {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    text-decoration: none;
-    letter-spacing: -0.02em;
-  }
-
-  .site-logo:hover {
-    color: var(--color-primary-dark);
-  }
-
-  .site-nav a {
-    font-size: 0.95rem;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .site-nav a:hover {
-    color: var(--color-primary);
-  }
-</style>
+<script>
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  btn?.addEventListener("click", () => {
+    menu?.classList.toggle("hidden");
+  });
+</script>

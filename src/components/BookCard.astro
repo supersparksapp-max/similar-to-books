@@ -31,10 +31,20 @@ interface Props {
 const { book, writeup, rank, commonElements, parentBookTitle } = Astro.props;
 
 const coverUrl = book.coverImage
-  ? urlFor(book.coverImage).width(300).height(450).fit("crop").url()
+  ? urlFor(book.coverImage).width(600).height(900).fit("crop").url()
+  : null;
+
+const mobileCoverUrl = book.coverImage
+  ? urlFor(book.coverImage).width(800).height(500).fit("crop").url()
   : null;
 
 const isLazyLoad = rank > 2;
+const authorName = book.author?.name ?? "Unknown Author";
+const year = book.publishedDate
+  ? new Date(book.publishedDate).getFullYear()
+  : null;
+const primaryGenre =
+  book.genres && book.genres.length > 0 ? book.genres[0] : null;
 
 // Split writeup into paragraphs at sentence boundaries (roughly every 3-4 sentences)
 function splitIntoParagraphs(text: string): string[] {
@@ -51,288 +61,120 @@ function splitIntoParagraphs(text: string): string[] {
 const paragraphs = splitIntoParagraphs(writeup);
 ---
 
-<article class="book-card" id={`recommendation-${rank}`}>
-  <div class="book-card__image">
-    {
-      coverUrl ? (
-        <img
-          src={coverUrl}
-          alt={`${book.title} by ${book.author?.name ?? "Unknown Author"} book cover`}
-          width="150"
-          height="225"
-          loading={isLazyLoad ? "lazy" : "eager"}
-        />
+<article
+  class="card-shadow bg-[#F2EFE9] border border-black/5 p-8 lg:p-12 rounded-xl hover:bg-[#ebe8e2] hover:-translate-y-1 transition-all duration-300"
+  id={`recommendation-${rank}`}
+>
+  <div class="flex flex-col md:flex-row md:gap-10 lg:gap-14">
+    {/* Cover Image */}
+    <div class="md:w-1/4 flex-shrink-0 mb-8 md:mb-0">
+      {coverUrl ? (
+        <>
+          {/* Mobile cover - full width 16:10 */}
+          <img
+            src={mobileCoverUrl}
+            alt={`${book.title} by ${authorName} book cover`}
+            loading={isLazyLoad ? "lazy" : "eager"}
+            class="md:hidden w-full aspect-[16/10] object-cover rounded-sm"
+          />
+          {/* Desktop cover - portrait 2:3 */}
+          <img
+            src={coverUrl}
+            alt={`${book.title} by ${authorName} book cover`}
+            loading={isLazyLoad ? "lazy" : "eager"}
+            class="hidden md:block editorial-shadow rounded-sm aspect-[2/3] object-cover w-full"
+          />
+        </>
       ) : (
-        <div class="book-card__placeholder" aria-label="No cover available">
-          <span>{book.title}</span>
+        <div class="w-full aspect-[2/3] bg-surface-container rounded-sm flex items-center justify-center p-6">
+          <span class="font-serif text-on-surface-variant text-center text-sm">{book.title}</span>
         </div>
-      )
-    }
-  </div>
-
-  <div class="book-card__content">
-    <h3 class="book-card__title">
-      <a href={`/${book.slug}`}>{book.title}</a>
-    </h3>
-
-    {
-      book.author && (
-        <p class="book-card__author">
-          by{" "}
-          <a href={`/author/${book.author.slug}`}>{book.author.name}</a>
-        </p>
-      )
-    }
-
-    <div class="book-card__meta">
-      {book.publishedDate && <span>Published: {book.publishedDate}</span>}
-      {book.publisher && <span>Publisher: {book.publisher}</span>}
-      {book.pageCount && <span>{book.pageCount} pages</span>}
+      )}
     </div>
 
-    {
-      book.genres && book.genres.length > 0 && (
-        <div class="book-card__genres">
-          {book.genres.map((genre) => (
-            <a href={`/genre/${genre.slug}`} class="genre-pill">
-              {genre.name}
+    {/* Content */}
+    <div class="flex-1 min-w-0">
+      {/* Title */}
+      <h3 class="text-3xl font-bold font-serif tracking-tight mb-4">
+        <a href={`/${book.slug}`} class="text-on-background hover:text-primary transition-colors no-underline">
+          {book.title}
+        </a>
+      </h3>
+
+      {/* Metadata line */}
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mb-6 font-sans text-[11px] tracking-widest uppercase text-on-surface-variant">
+        {book.author && (
+          <a href={`/author/${book.author.slug}`} class="hover:text-primary transition-colors no-underline text-on-surface-variant">
+            {authorName}
+          </a>
+        )}
+        {year && (
+          <>
+            <span class="text-outline-variant">&middot;</span>
+            <span>{year}</span>
+          </>
+        )}
+        {primaryGenre && (
+          <>
+            <span class="text-outline-variant">&middot;</span>
+            <a href={`/genre/${primaryGenre.slug}`} class="hover:text-primary transition-colors no-underline text-on-surface-variant">
+              {primaryGenre.name}
             </a>
-          ))}
-        </div>
-      )
-    }
+          </>
+        )}
+      </div>
 
-    <div class="book-card__writeup">
-      {paragraphs.map((para) => (
-        <p>{para}</p>
-      ))}
-    </div>
+      {/* Why it's similar label */}
+      <p class="font-sans text-[10px] uppercase tracking-widest font-bold text-primary mb-3">
+        Why it's similar
+      </p>
 
-    {
-      commonElements && commonElements.length > 0 && (
-        <div class="book-card__common">
-          <h4>Elements in common with {parentBookTitle}:</h4>
-          <ul>
+      {/* Writeup */}
+      <div class="font-serif text-lg leading-relaxed text-on-background/85 mb-8">
+        {paragraphs.map((para) => (
+          <p class="mb-4 last:mb-0">{para}</p>
+        ))}
+      </div>
+
+      {/* Common Elements callout */}
+      {commonElements && commonElements.length > 0 && (
+        <div class="border-l-3 border-blue-600 bg-blue-50/60 rounded-r-md px-6 py-5 mb-8">
+          <h4 class="font-sans text-[11px] uppercase tracking-widest font-bold text-blue-800 mb-3">
+            Elements in common with {parentBookTitle}
+          </h4>
+          <ul class="list-disc pl-5 space-y-1">
             {commonElements.map((element) => (
-              <li>{element}</li>
+              <li class="font-sans text-sm text-blue-900/80 leading-relaxed">{element}</li>
             ))}
           </ul>
         </div>
-      )
-    }
+      )}
 
-    <div class="book-card__actions">
-      <a href={`/${book.slug}`} class="btn btn--primary">
-        Books Like {book.title}
-      </a>
-      {
-        book.amazonAffiliateLink && (
-          <a
-            href={book.amazonAffiliateLink}
-            class="btn btn--secondary"
-            target="_blank"
-            rel="nofollow noopener sponsored"
-          >
-            Buy on Amazon
-          </a>
-        )
-      }
+      {/* Buy on Amazon button */}
+      {book.amazonAffiliateLink && (
+        <a
+          href={book.amazonAffiliateLink}
+          target="_blank"
+          rel="nofollow noopener sponsored"
+          class="inline-block border border-primary text-primary font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-10 py-4 rounded-sm hover:bg-primary hover:text-white transition-all duration-200"
+        >
+          Buy on Amazon
+        </a>
+      )}
     </div>
   </div>
 </article>
 
 <style>
-  .book-card {
-    display: flex;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-    background: #fff;
+  .card-shadow {
+    box-shadow:
+      0 10px 40px -10px rgba(0, 0, 0, 0.04),
+      0 0 1px 0 rgba(0, 0, 0, 0.1);
   }
 
-  @media (max-width: 640px) {
-    .book-card {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-  }
-
-  .book-card__image {
-    flex-shrink: 0;
-    width: 150px;
-  }
-
-  .book-card__image img {
-    width: 150px;
-    height: auto;
-    border-radius: 0.25rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  }
-
-  .book-card__placeholder {
-    width: 150px;
-    height: 225px;
-    background: #f3f4f6;
-    border-radius: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    font-size: 0.875rem;
-    color: #6b7280;
-    text-align: center;
-  }
-
-  .book-card__content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .book-card__title {
-    margin: 0 0 0.25rem;
-    font-size: 1.25rem;
-    line-height: 1.3;
-  }
-
-  .book-card__title a {
-    color: #111827;
-    text-decoration: none;
-  }
-
-  .book-card__title a:hover {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-
-  .book-card__author {
-    margin: 0 0 0.5rem;
-    color: #4b5563;
-    font-size: 0.95rem;
-  }
-
-  .book-card__author a {
-    color: #2563eb;
-    text-decoration: none;
-  }
-
-  .book-card__author a:hover {
-    text-decoration: underline;
-  }
-
-  .book-card__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.8rem;
-    color: #6b7280;
-  }
-
-  .book-card__genres {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .genre-pill {
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
-    background: #eff6ff;
-    color: #2563eb;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    text-decoration: none;
-    border: 1px solid #bfdbfe;
-  }
-
-  .genre-pill:hover {
-    background: #dbeafe;
-  }
-
-  .book-card__writeup {
-    margin-bottom: 1rem;
-    line-height: 1.65;
-    color: #374151;
-    font-size: 0.95rem;
-  }
-
-  .book-card__common {
-    margin-bottom: 1rem;
-    padding: 0.875rem 1rem;
-    background: #f0f7ff;
-    border-left: 3px solid #2563eb;
-    border-radius: 0 0.375rem 0.375rem 0;
-  }
-
-  .book-card__common h4 {
-    margin: 0 0 0.5rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #1e40af;
-    font-family: var(--font-heading);
-  }
-
-  .book-card__common ul {
-    margin: 0;
-    padding-left: 1.25rem;
-    list-style-type: disc;
-  }
-
-  .book-card__common li {
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: #374151;
-    margin-bottom: 0.25rem;
-  }
-
-  .book-card__common li:last-child {
-    margin-bottom: 0;
-  }
-
-  .book-card__writeup p {
-    margin: 0 0 0.75rem;
-  }
-
-  .book-card__writeup p:last-child {
-    margin-bottom: 0;
-  }
-
-  .book-card__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-    text-align: center;
-    transition: background-color 0.15s;
-  }
-
-  .btn--primary {
-    background: #2563eb;
-    color: #fff;
-  }
-
-  .btn--primary:hover {
-    background: #1d4ed8;
-  }
-
-  .btn--secondary {
-    background: #f59e0b;
-    color: #fff;
-  }
-
-  .btn--secondary:hover {
-    background: #d97706;
+  .editorial-shadow {
+    box-shadow:
+      0 4px 14px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.06);
   }
 </style>

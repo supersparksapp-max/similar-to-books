@@ -41,257 +41,70 @@ const breadcrumbItems = [
     canonicalUrl={canonicalUrl}
   />
 
-  <Breadcrumbs items={breadcrumbItems} />
+  <div class="max-w-6xl mx-auto px-4 py-16">
+    <Breadcrumbs items={breadcrumbItems} />
 
-  <h1>{series.name} Series - Reading Order</h1>
+    <h1 class="font-serif text-4xl tracking-tight mb-4">
+      {series.name} Series - Reading Order
+    </h1>
 
-  {
-    series.description && (
-      <div class="series-description">
-        <p>{series.description}</p>
+    {series.description && (
+      <p class="text-on-surface-variant leading-relaxed text-lg max-w-3xl mb-16">
+        {series.description}
+      </p>
+    )}
+
+    {series.books && series.books.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        {series.books.map((book: any, index: number) => (
+          <div class="bg-[#F2EFE9] rounded-2xl p-8 flex flex-col items-center text-center group hover:shadow-card transition-shadow relative">
+            {/* Series number badge */}
+            <div class="absolute -top-3 -left-3 w-10 h-10 rounded-full bg-[#2d6a4f] text-white flex items-center justify-center font-bold text-sm shadow-editorial">
+              #{book.seriesOrder ?? index + 1}
+            </div>
+            {book.coverImage ? (
+              <a href={`/${book.slug}`} class="mb-6 block">
+                <img
+                  src={urlFor(book.coverImage).width(300).height(450).fit("crop").url()}
+                  alt={`${book.title} by ${book.author?.name ?? "Unknown Author"} book cover`}
+                  width="180"
+                  height="270"
+                  loading="lazy"
+                  class="mx-auto rounded-lg shadow-book group-hover:shadow-lg transition-shadow"
+                />
+              </a>
+            ) : (
+              <div class="w-[180px] h-[270px] bg-surface-container rounded-lg flex items-center justify-center mb-6 text-sm text-on-surface-variant">
+                <span>{book.title}</span>
+              </div>
+            )}
+            <h3 class="font-serif text-lg font-bold mb-1 leading-snug">
+              <a href={`/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors">
+                {book.title}
+              </a>
+            </h3>
+            {book.author && (
+              <p class="text-sm text-on-surface-variant italic mb-3">
+                <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors">
+                  {book.author.name}
+                </a>
+              </p>
+            )}
+            {book.status === "published" && (
+              <a
+                href={`/${book.slug}`}
+                class="text-sm text-[#0f5238] font-medium hover:underline"
+              >
+                If you loved this, try &rarr;
+              </a>
+            )}
+          </div>
+        ))}
       </div>
-    )
-  }
-
-  {
-    series.books && series.books.length > 0 ? (
-      <section class="series-books">
-        <ol class="reading-order">
-          {series.books.map((book: any, index: number) => (
-            <li class="reading-order__item">
-              <div class="reading-order__number">
-                {book.seriesOrder ?? index + 1}
-              </div>
-              <div class="reading-order__cover">
-                {book.coverImage ? (
-                  <img
-                    src={urlFor(book.coverImage)
-                      .width(200)
-                      .height(300)
-                      .fit("crop")
-                      .url()}
-                    alt={`${book.title} book cover`}
-                    width="120"
-                    height="180"
-                    loading={index < 2 ? "eager" : "lazy"}
-                  />
-                ) : (
-                  <div class="reading-order__placeholder">
-                    <span>{book.title}</span>
-                  </div>
-                )}
-              </div>
-              <div class="reading-order__content">
-                <h3>
-                  <a href={`/${book.slug}`}>{book.title}</a>
-                </h3>
-                {book.author && (
-                  <p class="reading-order__author">
-                    by{" "}
-                    <a href={`/author/${book.author.slug}`}>
-                      {book.author.name}
-                    </a>
-                  </p>
-                )}
-                {book.description && (
-                  <p class="reading-order__desc">{book.description}</p>
-                )}
-                <div class="reading-order__actions">
-                  {book.status === "published" && (
-                    <a href={`/${book.slug}`} class="btn btn--primary">
-                      Books Like {book.title}
-                    </a>
-                  )}
-                  {book.amazonAffiliateLink && (
-                    <a
-                      href={book.amazonAffiliateLink}
-                      class="btn btn--secondary"
-                      target="_blank"
-                      rel="nofollow noopener sponsored"
-                    >
-                      Buy on Amazon
-                    </a>
-                  )}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
     ) : (
-      <p class="empty-state">
+      <p class="text-on-surface-variant italic">
         No books added to this series yet. Check back soon!
       </p>
-    )
-  }
+    )}
+  </div>
 </BaseLayout>
-
-<style>
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-
-  .series-description {
-    margin-bottom: 2rem;
-    line-height: 1.7;
-    color: #374151;
-    font-size: 1.05rem;
-    max-width: 700px;
-  }
-
-  .series-description p {
-    margin: 0;
-  }
-
-  .reading-order {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .reading-order__item {
-    display: flex;
-    gap: 1.25rem;
-    padding: 1.5rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    background: #fff;
-    align-items: flex-start;
-  }
-
-  @media (max-width: 640px) {
-    .reading-order__item {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-  }
-
-  .reading-order__number {
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #2563eb;
-    color: #fff;
-    border-radius: 50%;
-    font-weight: 700;
-    font-size: 1rem;
-  }
-
-  .reading-order__cover {
-    flex-shrink: 0;
-    width: 120px;
-  }
-
-  .reading-order__cover img {
-    width: 120px;
-    height: auto;
-    border-radius: 0.25rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  }
-
-  .reading-order__placeholder {
-    width: 120px;
-    height: 180px;
-    background: #f3f4f6;
-    border-radius: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    font-size: 0.8rem;
-    color: #6b7280;
-    text-align: center;
-  }
-
-  .reading-order__content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .reading-order__content h3 {
-    margin: 0 0 0.25rem;
-    font-size: 1.15rem;
-  }
-
-  .reading-order__content h3 a {
-    color: #111827;
-    text-decoration: none;
-  }
-
-  .reading-order__content h3 a:hover {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-
-  .reading-order__author {
-    margin: 0 0 0.5rem;
-    color: #4b5563;
-    font-size: 0.9rem;
-  }
-
-  .reading-order__author a {
-    color: #2563eb;
-    text-decoration: none;
-  }
-
-  .reading-order__author a:hover {
-    text-decoration: underline;
-  }
-
-  .reading-order__desc {
-    margin: 0 0 0.75rem;
-    font-size: 0.9rem;
-    color: #6b7280;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .reading-order__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 0.4rem 0.85rem;
-    border-radius: 0.375rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background-color 0.15s;
-  }
-
-  .btn--primary {
-    background: #2563eb;
-    color: #fff;
-  }
-
-  .btn--primary:hover {
-    background: #1d4ed8;
-  }
-
-  .btn--secondary {
-    background: #f59e0b;
-    color: #fff;
-  }
-
-  .btn--secondary:hover {
-    background: #d97706;
-  }
-
-  .empty-state {
-    color: #6b7280;
-    font-style: italic;
-  }
-</style>
