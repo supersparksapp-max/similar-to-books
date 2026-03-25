@@ -1,0 +1,290 @@
+---
+import { urlFor } from "../utils/seo";
+
+interface BookData {
+  title: string;
+  slug: string;
+  coverImage?: any;
+  publishedDate?: string;
+  publisher?: string;
+  pageCount?: number;
+  description?: string;
+  amazonAffiliateLink?: string;
+  author?: {
+    name: string;
+    slug: string;
+  };
+  genres?: Array<{
+    name: string;
+    slug: string;
+  }>;
+}
+
+interface Props {
+  book: BookData;
+  writeup: string;
+  rank: number;
+}
+
+const { book, writeup, rank } = Astro.props;
+
+const coverUrl = book.coverImage
+  ? urlFor(book.coverImage).width(300).height(450).fit("crop").url()
+  : null;
+
+const isLazyLoad = rank > 2;
+
+// Split writeup into paragraphs at sentence boundaries (roughly every 3-4 sentences)
+function splitIntoParagraphs(text: string): string[] {
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  if (sentences.length <= 3) return [text];
+
+  const midpoint = Math.ceil(sentences.length / 2);
+  return [
+    sentences.slice(0, midpoint).join("").trim(),
+    sentences.slice(midpoint).join("").trim(),
+  ].filter(Boolean);
+}
+
+const paragraphs = splitIntoParagraphs(writeup);
+---
+
+<article class="book-card" id={`recommendation-${rank}`}>
+  <div class="book-card__image">
+    {
+      coverUrl ? (
+        <img
+          src={coverUrl}
+          alt={`${book.title} by ${book.author?.name ?? "Unknown Author"} book cover`}
+          width="150"
+          height="225"
+          loading={isLazyLoad ? "lazy" : "eager"}
+        />
+      ) : (
+        <div class="book-card__placeholder" aria-label="No cover available">
+          <span>{book.title}</span>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="book-card__content">
+    <h3 class="book-card__title">
+      <a href={`/${book.slug}`}>{book.title}</a>
+    </h3>
+
+    {
+      book.author && (
+        <p class="book-card__author">
+          by{" "}
+          <a href={`/author/${book.author.slug}`}>{book.author.name}</a>
+        </p>
+      )
+    }
+
+    <div class="book-card__meta">
+      {book.publishedDate && <span>Published: {book.publishedDate}</span>}
+      {book.publisher && <span>Publisher: {book.publisher}</span>}
+      {book.pageCount && <span>{book.pageCount} pages</span>}
+    </div>
+
+    {
+      book.genres && book.genres.length > 0 && (
+        <div class="book-card__genres">
+          {book.genres.map((genre) => (
+            <a href={`/genre/${genre.slug}`} class="genre-pill">
+              {genre.name}
+            </a>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="book-card__writeup">
+      {paragraphs.map((para) => (
+        <p>{para}</p>
+      ))}
+    </div>
+
+    <div class="book-card__actions">
+      <a href={`/${book.slug}`} class="btn btn--primary">
+        Books Like {book.title}
+      </a>
+      {
+        book.amazonAffiliateLink && (
+          <a
+            href={book.amazonAffiliateLink}
+            class="btn btn--secondary"
+            target="_blank"
+            rel="nofollow noopener sponsored"
+          >
+            Buy on Amazon
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .book-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    background: #fff;
+  }
+
+  @media (max-width: 640px) {
+    .book-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .book-card__image {
+    flex-shrink: 0;
+    width: 150px;
+  }
+
+  .book-card__image img {
+    width: 150px;
+    height: auto;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  .book-card__placeholder {
+    width: 150px;
+    height: 225px;
+    background: #f3f4f6;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-align: center;
+  }
+
+  .book-card__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .book-card__title {
+    margin: 0 0 0.25rem;
+    font-size: 1.25rem;
+    line-height: 1.3;
+  }
+
+  .book-card__title a {
+    color: #111827;
+    text-decoration: none;
+  }
+
+  .book-card__title a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+
+  .book-card__author {
+    margin: 0 0 0.5rem;
+    color: #4b5563;
+    font-size: 0.95rem;
+  }
+
+  .book-card__author a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+
+  .book-card__author a:hover {
+    text-decoration: underline;
+  }
+
+  .book-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+  }
+
+  .book-card__genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .genre-pill {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    border: 1px solid #bfdbfe;
+  }
+
+  .genre-pill:hover {
+    background: #dbeafe;
+  }
+
+  .book-card__writeup {
+    margin-bottom: 1rem;
+    line-height: 1.65;
+    color: #374151;
+    font-size: 0.95rem;
+  }
+
+  .book-card__writeup p {
+    margin: 0 0 0.75rem;
+  }
+
+  .book-card__writeup p:last-child {
+    margin-bottom: 0;
+  }
+
+  .book-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.15s;
+  }
+
+  .btn--primary {
+    background: #2563eb;
+    color: #fff;
+  }
+
+  .btn--primary:hover {
+    background: #1d4ed8;
+  }
+
+  .btn--secondary {
+    background: #f59e0b;
+    color: #fff;
+  }
+
+  .btn--secondary:hover {
+    background: #d97706;
+  }
+</style>

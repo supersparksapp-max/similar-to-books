@@ -1,0 +1,233 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import { getAllAuthors, getAuthorBySlug } from "../../utils/sanity";
+import { urlFor } from "../../utils/seo";
+
+export async function getStaticPaths() {
+  const authors = await getAllAuthors();
+  if (!authors || authors.length === 0) return [];
+  return authors.map((author: any) => ({
+    params: { slug: author.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const author = await getAuthorBySlug(slug!);
+
+if (!author) {
+  return Astro.redirect("/404");
+}
+
+const seoTitle =
+  author.seoTitle ?? `${author.name} Books & Recommendations`;
+const seoDescription =
+  author.seoDescription ??
+  `Discover books by ${author.name} and find similar recommendations for every title.`;
+const canonicalUrl = `https://similartobooks.com/author/${author.slug}`;
+const ogImage = author.image
+  ? urlFor(author.image).width(1200).height(630).fit("crop").url()
+  : undefined;
+
+const breadcrumbItems = [
+  { label: "Home", href: "/" },
+  { label: author.name, href: `/author/${author.slug}` },
+];
+
+// Derive unique genres from the author's books
+const genreMap = new Map<string, { name: string; slug: string }>();
+if (author.books) {
+  for (const book of author.books) {
+    if (book.genres) {
+      for (const genre of book.genres) {
+        if (!genreMap.has(genre.slug)) {
+          genreMap.set(genre.slug, genre);
+        }
+      }
+    }
+  }
+}
+const authorGenres = Array.from(genreMap.values());
+---
+
+<BaseLayout title={seoTitle} description={seoDescription}>
+  <SEOHead
+    slot="head"
+    title={seoTitle}
+    description={seoDescription}
+    canonicalUrl={canonicalUrl}
+    ogImage={ogImage}
+  />
+
+  <Breadcrumbs items={breadcrumbItems} />
+
+  <h1>Books by {author.name}</h1>
+
+  {
+    author.bio && (
+      <div class="author-bio">
+        <p>{author.bio}</p>
+      </div>
+    )
+  }
+
+  {
+    author.books && author.books.length > 0 && (
+      <section class="author-books">
+        <div class="book-grid">
+          {author.books.map((book: any, index: number) => (
+            <a href={`/${book.slug}`} class="book-grid__item">
+              {book.coverImage ? (
+                <img
+                  src={urlFor(book.coverImage)
+                    .width(300)
+                    .height(450)
+                    .fit("crop")
+                    .url()}
+                  alt={`${book.title} book cover`}
+                  width="200"
+                  height="300"
+                  loading={index < 2 ? "eager" : "lazy"}
+                />
+              ) : (
+                <div class="book-grid__placeholder">
+                  <span>{book.title}</span>
+                </div>
+              )}
+              <h3>{book.title}</h3>
+              {book.status === "published" && (
+                <span class="book-grid__cta">
+                  Books Like {book.title}
+                </span>
+              )}
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    authorGenres.length > 0 && (
+      <section class="author-genres">
+        <h2>Genres {author.name} Writes In</h2>
+        <div class="tag-list">
+          {authorGenres.map((genre) => (
+            <a href={`/genre/${genre.slug}`} class="genre-pill">
+              {genre.name}
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .author-bio {
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    color: #374151;
+    font-size: 1.05rem;
+    max-width: 700px;
+  }
+
+  .author-bio p {
+    margin: 0;
+  }
+
+  .author-books {
+    margin-bottom: 2.5rem;
+  }
+
+  .book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .book-grid__item {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.15s;
+  }
+
+  .book-grid__item:hover {
+    transform: translateY(-4px);
+  }
+
+  .book-grid__item img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    margin-bottom: 0.75rem;
+  }
+
+  .book-grid__placeholder {
+    width: 200px;
+    height: 300px;
+    background: #f3f4f6;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .book-grid__item h3 {
+    font-size: 1rem;
+    margin: 0 0 0.25rem;
+    line-height: 1.3;
+  }
+
+  .book-grid__cta {
+    font-size: 0.8rem;
+    color: #2563eb;
+  }
+
+  .author-genres {
+    margin-bottom: 2.5rem;
+  }
+
+  .author-genres h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .genre-pill {
+    display: inline-block;
+    padding: 0.3rem 0.75rem;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border: 1px solid #bfdbfe;
+  }
+
+  .genre-pill:hover {
+    background: #dbeafe;
+  }
+</style>

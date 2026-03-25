@@ -1,0 +1,159 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SEOHead from "../components/SEOHead.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import BookCard from "../components/BookCard.astro";
+import { PortableText } from "astro-portabletext";
+import { getPublishedBooks, getBookBySlug } from "../utils/sanity";
+import {
+  urlFor,
+  generateBookSchema,
+  generateItemListSchema,
+} from "../utils/seo";
+
+export async function getStaticPaths() {
+  const books = await getPublishedBooks();
+  if (!books || books.length === 0) return [];
+  return books.map((book: any) => ({
+    params: { slug: book.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const book = await getBookBySlug(slug!);
+
+if (!book) {
+  return Astro.redirect("/404");
+}
+
+const currentYear = new Date().getFullYear();
+const recCount = book.recommendations?.length ?? 0;
+const authorName = book.author?.name ?? "Unknown Author";
+const primaryGenre =
+  book.genres && book.genres.length > 0 ? book.genres[0] : null;
+
+const seoTitle =
+  book.seoTitle ??
+  `${recCount} Books Like ${book.title} by ${authorName} (${currentYear})`;
+const seoDescription =
+  book.seoDescription ??
+  `Looking for books like ${book.title} by ${authorName}? Here are ${recCount} books similar to ${book.title} that share the same themes, style, and appeal.`;
+const canonicalUrl = `https://similartobooks.com/${book.slug}`;
+const ogImage = book.coverImage
+  ? urlFor(book.coverImage).width(1200).height(630).fit("crop").url()
+  : undefined;
+
+const breadcrumbItems = [
+  { label: "Home", href: "/" },
+  ...(primaryGenre
+    ? [{ label: primaryGenre.name, href: `/genre/${primaryGenre.slug}` }]
+    : []),
+  { label: `Books Like ${book.title}`, href: `/${book.slug}` },
+];
+
+const sortedRecommendations = (book.recommendations ?? []).sort(
+  (a: any, b: any) => (a.rank ?? 999) - (b.rank ?? 999)
+);
+
+const bookSchema = generateBookSchema(book);
+const itemListSchema = generateItemListSchema(sortedRecommendations, book);
+---
+
+<BaseLayout title={seoTitle} description={seoDescription}>
+  <SEOHead
+    slot="head"
+    title={seoTitle}
+    description={seoDescription}
+    canonicalUrl={canonicalUrl}
+    ogImage={ogImage}
+    ogType="article"
+  />
+
+  <Breadcrumbs items={breadcrumbItems} />
+
+  <h1>Books Like {book.title} by {authorName}</h1>
+
+  {
+    book.introContent && book.introContent.length > 0 && (
+      <div class="intro-content">
+        <PortableText value={book.introContent} />
+      </div>
+    )
+  }
+
+  {
+    sortedRecommendations.length > 0 && (
+      <section class="recommendations">
+        {sortedRecommendations.map((rec: any) => (
+          <BookCard
+            book={rec.book}
+            writeup={rec.writeup}
+            rank={rec.rank ?? 0}
+          />
+        ))}
+      </section>
+    )
+  }
+
+  {
+    book.author && (
+      <section class="also-by">
+        <h2>Also by {book.author.name}</h2>
+        <p>
+          Explore more books by{" "}
+          <a href={`/author/${book.author.slug}`}>{book.author.name}</a>.
+        </p>
+      </section>
+    )
+  }
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(bookSchema)}
+  />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(itemListSchema)}
+  />
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .intro-content {
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    font-size: 1.05rem;
+    color: #374151;
+  }
+
+  .recommendations {
+    margin-bottom: 2.5rem;
+  }
+
+  .also-by {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+  }
+
+  .also-by h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .also-by a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+
+  .also-by a:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+import { generateBreadcrumbSchema } from "../utils/seo";
+
+interface BreadcrumbItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+const schemaItems = items.map((item) => ({
+  name: item.label,
+  url: item.href.startsWith("http")
+    ? item.href
+    : `https://similartobooks.com${item.href}`,
+}));
+
+const breadcrumbSchema = generateBreadcrumbSchema(schemaItems);
+---
+
+<nav aria-label="Breadcrumb" class="breadcrumbs">
+  <ol>
+    {
+      items.map((item, index) => (
+        <li>
+          {index > 0 && <span class="separator" aria-hidden="true">&gt;</span>}
+          {index === items.length - 1 ? (
+            <span aria-current="page">{item.label}</span>
+          ) : (
+            <a href={item.href}>{item.label}</a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(breadcrumbSchema)}
+/>
+
+<style>
+  .breadcrumbs ol {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 0.875rem;
+    gap: 0.25rem;
+  }
+
+  .breadcrumbs li {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .breadcrumbs a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+
+  .breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumbs .separator {
+    color: #9ca3af;
+    margin: 0 0.25rem;
+  }
+
+  .breadcrumbs [aria-current="page"] {
+    color: #6b7280;
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="site-logo">Similar To Books</a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="/genres">Browse Genres</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .site-logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .site-logo:hover {
+    color: var(--color-primary-dark);
+  }
+
+  .site-nav a {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .site-nav a:hover {
+    color: var(--color-primary);
+  }
+</style>
