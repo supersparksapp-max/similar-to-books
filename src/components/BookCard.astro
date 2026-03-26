@@ -98,7 +98,7 @@ const paragraphs = splitIntoParagraphs(writeup);
       {/* Title */}
       <h3 class="text-3xl font-bold text-[#1C1917] font-serif">
         {book.status === "published" ? (
-          <a href={`/${book.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
+          <a href={`/discover/${book.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
             {book.title}
           </a>
         ) : (

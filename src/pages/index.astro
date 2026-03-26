@@ -58,7 +58,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
     <!-- Book Fan Arrangement -->
     {fanBooks.length >= 5 && (
       <div class="relative w-full max-w-6xl mx-auto h-[400px] mt-12 hidden md:flex justify-center items-end" style="perspective: 1000px;">
-        <a href={`/${fanBooks[0].slug}`} class="absolute transform -translate-x-64 translate-y-8 -rotate-[25deg] z-10">
+        <a href={`/discover/${fanBooks[0].slug}`} class="absolute transform -translate-x-64 translate-y-8 -rotate-[25deg] z-10">
           <img
             src={urlFor(fanBooks[0].coverImage).width(384).height(576).fit("crop").url()}
             alt={`${fanBooks[0].title} by ${fanBooks[0].author?.name ?? ""} book cover`}
@@ -66,7 +66,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
             loading="eager"
           />
         </a>
-        <a href={`/${fanBooks[1].slug}`} class="absolute transform -translate-x-32 translate-y-2 -rotate-[12deg] z-20">
+        <a href={`/discover/${fanBooks[1].slug}`} class="absolute transform -translate-x-32 translate-y-2 -rotate-[12deg] z-20">
           <img
             src={urlFor(fanBooks[1].coverImage).width(384).height(576).fit("crop").url()}
             alt={`${fanBooks[1].title} by ${fanBooks[1].author?.name ?? ""} book cover`}
@@ -74,7 +74,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
             loading="eager"
           />
         </a>
-        <a href={`/${fanBooks[2].slug}`} class="absolute transform translate-y-0 rotate-0 z-30">
+        <a href={`/discover/${fanBooks[2].slug}`} class="absolute transform translate-y-0 rotate-0 z-30">
           <img
             src={urlFor(fanBooks[2].coverImage).width(416).height(640).fit("crop").url()}
             alt={`${fanBooks[2].title} by ${fanBooks[2].author?.name ?? ""} book cover`}
@@ -82,7 +82,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
             loading="eager"
           />
         </a>
-        <a href={`/${fanBooks[3].slug}`} class="absolute transform translate-x-32 translate-y-2 rotate-[12deg] z-20">
+        <a href={`/discover/${fanBooks[3].slug}`} class="absolute transform translate-x-32 translate-y-2 rotate-[12deg] z-20">
           <img
             src={urlFor(fanBooks[3].coverImage).width(384).height(576).fit("crop").url()}
             alt={`${fanBooks[3].title} by ${fanBooks[3].author?.name ?? ""} book cover`}
@@ -90,7 +90,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
             loading="eager"
           />
         </a>
-        <a href={`/${fanBooks[4].slug}`} class="absolute transform translate-x-64 translate-y-8 rotate-[25deg] z-10">
+        <a href={`/discover/${fanBooks[4].slug}`} class="absolute transform translate-x-64 translate-y-8 rotate-[25deg] z-10">
           <img
             src={urlFor(fanBooks[4].coverImage).width(384).height(576).fit("crop").url()}
             alt={`${fanBooks[4].title} by ${fanBooks[4].author?.name ?? ""} book cover`}
@@ -105,7 +105,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
     {fanBooks.length >= 3 && (
       <div class="flex md:hidden gap-4 overflow-x-auto px-6 mt-8 pb-4 snap-x snap-mandatory">
         {fanBooks.map((book: any) => (
-          <a href={`/${book.slug}`} class="flex-shrink-0 snap-center">
+          <a href={`/discover/${book.slug}`} class="flex-shrink-0 snap-center">
             <img
               src={urlFor(book.coverImage).width(256).height(384).fit("crop").url()}
               alt={`${book.title} book cover`}
@@ -124,7 +124,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
       <div class="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-20 items-center">
         <div class="relative aspect-[3/4] overflow-hidden rounded-lg">
           {featuredBook.coverImage ? (
-            <a href={`/${featuredBook.slug}`} class="block">
+            <a href={`/discover/${featuredBook.slug}`} class="block">
               <img
                 src={urlFor(featuredBook.coverImage).width(800).height(1066).fit("crop").url()}
                 alt={`${featuredBook.title} by ${featuredBook.author?.name ?? ""} book cover`}
@@ -141,7 +141,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
         <div class="flex flex-col gap-8">
           <span class="font-sans text-[10px] tracking-[0.3em] uppercase font-semibold text-[#0f5238]">Curator's Choice</span>
           <h2 class="text-4xl md:text-5xl font-serif italic text-[#1C1917] leading-tight">
-            <a href={`/${featuredBook.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
+            <a href={`/discover/${featuredBook.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
               Books Like {featuredBook.title}
             </a>
           </h2>
@@ -154,7 +154,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
           </div>
           <div>
             <a
-              href={`/${featuredBook.slug}`}
+              href={`/discover/${featuredBook.slug}`}
               class="font-sans text-xs tracking-widest uppercase font-bold text-[#0f5238] inline-flex items-center gap-2 group"
             >
               Read the Curation
@@ -179,7 +179,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {books.map((book: any) => (
             <div class="group">
-              <a href={`/${book.slug}`} class="block">
+              <a href={`/discover/${book.slug}`} class="block">
                 <div class="bg-[#F2EFE9] p-8 aspect-[2/3] mb-6 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-2">
                   {book.coverImage ? (
                     <img
@@ -199,7 +199,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
                 </span>
               )}
               <h4 class="font-serif text-xl text-[#1C1917] mb-1">
-                <a href={`/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
+                <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
               </h4>
               {book.author && (
                 <p class="font-sans text-xs text-[#404943] tracking-wider font-light">
