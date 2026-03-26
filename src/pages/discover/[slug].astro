@@ -1,15 +1,15 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import SEOHead from "../components/SEOHead.astro";
-import Breadcrumbs from "../components/Breadcrumbs.astro";
-import BookCard from "../components/BookCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BookCard from "../../components/BookCard.astro";
 import { PortableText } from "astro-portabletext";
-import { getPublishedBooks, getBookBySlug } from "../utils/sanity";
+import { getPublishedBooks, getBookBySlug } from "../../utils/sanity";
 import {
   urlFor,
   generateBookSchema,
   generateItemListSchema,
-} from "../utils/seo";
+} from "../../utils/seo";
 
 export async function getStaticPaths() {
   const books = await getPublishedBooks();
