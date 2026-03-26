@@ -8,9 +8,11 @@ import { urlFor } from "../../utils/seo";
 export async function getStaticPaths() {
   const allSeries = await getAllSeries();
   if (!allSeries || allSeries.length === 0) return [];
-  return allSeries.map((series: any) => ({
-    params: { slug: series.slug },
-  }));
+  return allSeries
+    .filter((series: any) => series.slug)
+    .map((series: any) => ({
+      params: { slug: series.slug },
+    }));
 }
 
 const { slug } = Astro.params;

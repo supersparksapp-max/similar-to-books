@@ -8,9 +8,11 @@ import { urlFor } from "../../utils/seo";
 export async function getStaticPaths() {
   const authors = await getAllAuthors();
   if (!authors || authors.length === 0) return [];
-  return authors.map((author: any) => ({
-    params: { slug: author.slug },
-  }));
+  return authors
+    .filter((author: any) => author.slug)
+    .map((author: any) => ({
+      params: { slug: author.slug },
+    }));
 }
 
 const { slug } = Astro.params;

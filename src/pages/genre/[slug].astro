@@ -9,9 +9,11 @@ import { urlFor } from "../../utils/seo";
 export async function getStaticPaths() {
   const genres = await getAllGenres();
   if (!genres || genres.length === 0) return [];
-  return genres.map((genre: any) => ({
-    params: { slug: genre.slug },
-  }));
+  return genres
+    .filter((genre: any) => genre.slug)
+    .map((genre: any) => ({
+      params: { slug: genre.slug },
+    }));
 }
 
 const { slug } = Astro.params;

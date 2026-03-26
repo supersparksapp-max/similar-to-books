@@ -14,9 +14,11 @@ import {
 export async function getStaticPaths() {
   const books = await getPublishedBooks();
   if (!books || books.length === 0) return [];
-  return books.map((book: any) => ({
-    params: { slug: book.slug },
-  }));
+  return books
+    .filter((book: any) => book.slug)
+    .map((book: any) => ({
+      params: { slug: book.slug },
+    }));
 }
 
 const { slug } = Astro.params;
