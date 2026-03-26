@@ -8,22 +8,37 @@ const client = createClient({
   useCdn: false,
 });
 
+async function getOpenLibraryCover(title, authorName) {
+  try {
+    const query = authorName ? `${title} ${authorName}` : title;
+    const res = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=3`);
+    const data = await res.json();
+    if (data.docs?.length > 0) {
+      for (const doc of data.docs) {
+        if (doc.cover_i) {
+          return `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`;
+        }
+      }
+    }
+  } catch (e) { /* fall through */ }
+  return null;
+}
+
 async function getGoogleBooksImageUrl(title, authorName, isbn) {
-  // Try ISBN first
+  // Try ISBN first with Google
   if (isbn) {
     try {
       const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&maxResults=1`);
       const data = await res.json();
       if (data.items?.[0]?.volumeInfo?.imageLinks) {
         const links = data.items[0].volumeInfo.imageLinks;
-        // Get the largest available image
         const url = links.extraLarge || links.large || links.medium || links.small || links.thumbnail;
         if (url) return url.replace('http://', 'https://').replace('&edge=curl', '').replace('zoom=1', 'zoom=3');
       }
     } catch (e) { /* fall through */ }
   }
 
-  // Try title + author
+  // Try title + author with Google
   try {
     const query = `intitle:${title}${authorName ? `+inauthor:${authorName}` : ''}`;
     const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=1`);
@@ -34,6 +49,10 @@ async function getGoogleBooksImageUrl(title, authorName, isbn) {
       if (url) return url.replace('http://', 'https://').replace('&edge=curl', '').replace('zoom=1', 'zoom=3');
     }
   } catch (e) { /* fall through */ }
+
+  // Fallback: Open Library
+  const olUrl = await getOpenLibraryCover(title, authorName);
+  if (olUrl) return olUrl;
 
   return null;
 }

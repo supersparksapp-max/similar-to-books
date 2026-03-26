@@ -68,6 +68,7 @@ const bookBySlugQuery = defineQuery(`
         publisher,
         pageCount,
         amazonAffiliateLink,
+        status,
         author->{ _id, name, "slug": slug.current },
         genres[]->{ _id, name, "slug": slug.current }
       }
