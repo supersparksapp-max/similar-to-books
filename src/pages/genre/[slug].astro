@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SEOHead from "../../components/SEOHead.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BookGridCard from "../../components/BookGridCard.astro";
 import { getAllGenres, getGenreBySlug } from "../../utils/sanity";
 import { urlFor } from "../../utils/seo";
 
@@ -57,42 +58,7 @@ const breadcrumbItems = [
     {genre.books && genre.books.length > 0 ? (
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
         {genre.books.map((book: any) => (
-          <div class="bg-[#F2EFE9] rounded-2xl p-8 flex flex-col items-center text-center group hover:shadow-card transition-shadow">
-            {book.coverImage ? (
-              <a href={`/discover/${book.slug}`} class="mb-6 block">
-                <img
-                  src={urlFor(book.coverImage).width(300).height(450).fit("crop").url()}
-                  alt={`${book.title} by ${book.author?.name ?? "Unknown Author"} book cover`}
-                  width="180"
-                  height="270"
-                  loading="lazy"
-                  class="mx-auto rounded-lg shadow-book group-hover:shadow-lg transition-shadow"
-                />
-              </a>
-            ) : (
-              <div class="w-[180px] h-[270px] bg-surface-container rounded-lg flex items-center justify-center mb-6 text-sm text-on-surface-variant">
-                <span>{book.title}</span>
-              </div>
-            )}
-            <h3 class="font-serif text-lg font-bold mb-1 leading-snug">
-              <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors">
-                {book.title}
-              </a>
-            </h3>
-            {book.author && (
-              <p class="text-sm text-on-surface-variant italic mb-3">
-                <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors">
-                  {book.author.name}
-                </a>
-              </p>
-            )}
-            <a
-              href={`/discover/${book.slug}`}
-              class="text-sm text-[#0f5238] font-medium hover:underline"
-            >
-              If you loved this, try &rarr;
-            </a>
-          </div>
+          <BookGridCard book={book} />
         ))}
       </div>
     ) : (

@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BookGridCard from "../../components/BookGridCard.astro";
+import { getPublishedBooks } from "../../utils/sanity";
+
+const books = await getPublishedBooks();
+
+const seoTitle = "Browse All Book Recommendations | Similar To Books";
+const seoDescription = `Discover ${books?.length ?? 0} curated book recommendation lists. Find books similar to your favorites, organized by genre, theme, and style.`;
+const canonicalUrl = "https://www.similartobooks.com/discover";
+
+const breadcrumbItems = [
+  { label: "Home", href: "/" },
+  { label: "All Recommendations", href: "/discover" },
+];
+---
+
+<BaseLayout title={seoTitle} description={seoDescription}>
+  <SEOHead
+    slot="head"
+    title={seoTitle}
+    description={seoDescription}
+    canonicalUrl={canonicalUrl}
+    ogType="website"
+  />
+
+  <div class="max-w-7xl mx-auto px-8 py-16">
+    <Breadcrumbs items={breadcrumbItems} />
+
+    <div class="mb-16">
+      <h1 class="font-serif text-4xl md:text-5xl tracking-tight text-[#1C1917] mb-4">
+        All Book Recommendations
+      </h1>
+      <p class="font-sans text-sm text-[#404943] tracking-wide max-w-2xl">
+        Browse all {books?.length ?? 0} curated recommendation lists. Each page features hand-picked books similar to your favorite reads, with detailed editorial writeups on why they're a match.
+      </p>
+    </div>
+
+    {books && books.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        {books.map((book: any) => (
+          <BookGridCard book={book} />
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>

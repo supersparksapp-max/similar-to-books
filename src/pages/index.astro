@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SEOHead from "../components/SEOHead.astro";
+import BookGridCard from "../components/BookGridCard.astro";
 import { getPublishedBooks, getAllGenres, getAllTags } from "../utils/sanity";
 import { urlFor } from "../utils/seo";
 
@@ -177,40 +178,20 @@ const canonicalUrl = "https://www.similartobooks.com/";
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-          {books.map((book: any) => (
-            <div class="group">
-              <a href={`/discover/${book.slug}`} class="block">
-                <div class="bg-[#F2EFE9] p-8 aspect-[2/3] mb-6 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-2">
-                  {book.coverImage ? (
-                    <img
-                      src={urlFor(book.coverImage).width(400).height(600).fit("crop").url()}
-                      alt={`${book.title} by ${book.author?.name ?? ""} book cover`}
-                      class="w-full h-full object-cover book-shadow"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <span class="font-serif text-sm text-[#404943] text-center px-4">{book.title}</span>
-                  )}
-                </div>
-              </a>
-              {book.genres && book.genres.length > 0 && (
-                <span class="font-sans text-[9px] tracking-[0.2em] uppercase font-bold text-[#0f5238] mb-2 block">
-                  {book.genres.map((g: any) => g.name).join(" / ")}
-                </span>
-              )}
-              <h4 class="font-serif text-xl text-[#1C1917] mb-1">
-                <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
-              </h4>
-              {book.author && (
-                <p class="font-sans text-xs text-[#404943] tracking-wider font-light">
-                  <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
-                    {book.author.name}
-                  </a>
-                </p>
-              )}
-            </div>
+          {(books ?? []).slice(0, 12).map((book: any) => (
+            <BookGridCard book={book} />
           ))}
         </div>
+        {books && books.length > 12 && (
+          <div class="flex justify-center mt-20">
+            <a
+              href="/discover"
+              class="bg-transparent border-2 border-[#0f5238] text-[#0f5238] font-sans font-bold py-3 px-12 rounded-md hover:bg-[#0f5238]/5 transition-colors text-sm tracking-widest uppercase"
+            >
+              See All {books.length} Recommendations
+            </a>
+          </div>
+        )}
       </div>
     </section>
   )}

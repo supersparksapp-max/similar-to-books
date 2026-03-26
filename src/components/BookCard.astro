@@ -35,10 +35,6 @@ const coverUrl = book.coverImage
   ? urlFor(book.coverImage).width(600).height(900).fit("crop").url()
   : null;
 
-const mobileCoverUrl = book.coverImage
-  ? urlFor(book.coverImage).width(800).height(500).fit("crop").url()
-  : null;
-
 const isLazyLoad = rank > 2;
 const authorName = book.author?.name ?? "Unknown Author";
 const year = book.publishedDate
@@ -70,22 +66,12 @@ const paragraphs = splitIntoParagraphs(writeup);
     {/* Cover Image */}
     <div class="w-full md:w-1/4 flex-shrink-0">
       {coverUrl ? (
-        <>
-          {/* Mobile cover - full width 16:10 */}
-          <img
-            src={mobileCoverUrl}
-            alt={`${book.title} by ${authorName} book cover`}
-            loading={isLazyLoad ? "lazy" : "eager"}
-            class="md:hidden w-full aspect-[16/10] object-cover rounded-sm"
-          />
-          {/* Desktop cover - portrait 2:3 */}
-          <img
-            src={coverUrl}
-            alt={`${book.title} by ${authorName} book cover`}
-            loading={isLazyLoad ? "lazy" : "eager"}
-            class="hidden md:block w-full editorial-shadow rounded-sm aspect-[2/3] object-cover"
-          />
-        </>
+        <img
+          src={coverUrl}
+          alt={`${book.title} by ${authorName} book cover`}
+          loading={isLazyLoad ? "lazy" : "eager"}
+          class="w-full editorial-shadow rounded-sm aspect-[2/3] object-cover"
+        />
       ) : (
         <div class="w-full aspect-[2/3] bg-[#e5e2dc] rounded-sm flex items-center justify-center p-6">
           <span class="font-serif text-[#404943] text-center text-sm">{book.title}</span>
