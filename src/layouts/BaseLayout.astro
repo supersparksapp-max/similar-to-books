@@ -19,6 +19,13 @@ const { title, description } = Astro.props;
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/icon-256.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NFNC5NSB0W"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NFNC5NSB0W');
+    </script>
     <slot name="head" />
   </head>
   <body class="font-serif selection:bg-[#b1f0ce]/40 selection:text-[#002114]">
