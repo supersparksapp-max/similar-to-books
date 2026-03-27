@@ -125,17 +125,24 @@ const authorImageUrl = book.author?.image
         </div>
 
         <div class="flex-1">
-          {metaTagString && (
-            <span class="font-sans text-[10px] uppercase tracking-[0.2em] text-[#0f5238] font-bold mb-2 block">
-              {metaTagString}
-            </span>
+          {(year || primaryGenre) && (
+            <div class="font-sans text-[11px] uppercase tracking-[0.2em] text-[#0f5238] font-bold mb-2 flex flex-wrap items-center gap-1">
+              {year && <span>{year}</span>}
+              {year && primaryGenre && <span class="mx-1">&bull;</span>}
+              {primaryGenre && (
+                <a href={`/genre/${primaryGenre.slug}`} class="hover:underline no-underline">{primaryGenre.name}</a>
+              )}
+              {book.genres && book.genres.length > 1 && book.genres.slice(1).map((genre: any) => (
+                <><span class="mx-1">&bull;</span><a href={`/genre/${genre.slug}`} class="hover:underline no-underline">{genre.name}</a></>
+              ))}
+            </div>
           )}
           <h1 class="font-serif text-4xl md:text-5xl font-bold tracking-tight text-[#1C1917] leading-tight mb-2">
             {recCount} Books Like {book.title}
           </h1>
-          <p class="font-sans text-[10px] uppercase tracking-[0.2em] text-stone-500 font-bold">
+          <p class="font-sans text-[11px] uppercase tracking-[0.2em] text-stone-500 font-semibold">
             BY {book.author ? (
-              <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
+              <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">
                 {authorName.toUpperCase()}
               </a>
             ) : (
