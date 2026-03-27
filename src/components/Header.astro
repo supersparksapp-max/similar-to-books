@@ -1,18 +1,242 @@
 ---
 ---
 
-<header class="w-full top-0 sticky z-50 bg-[#FAF8F4]">
-  <div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<header class="w-full top-0 sticky z-50 bg-[#FAF8F4]/95 backdrop-blur-md">
+  <div class="flex justify-between items-center px-6 md:px-8 py-4 max-w-7xl mx-auto">
     <a href="/" class="flex items-center">
       <img src="/logo.png" alt="Similar To Books" style="height: 28px; width: auto; display: none;" class="logo-desktop" />
       <img src="/logo-icon.png" alt="Similar To Books" style="height: 32px; width: auto;" class="logo-mobile" />
     </a>
     <nav class="hidden md:flex items-center gap-12">
       <a href="/" class="font-sans tracking-widest uppercase text-xs text-[#2D6A4F] font-medium border-b border-[#2D6A4F]/20">Curations</a>
-      <a href="#genres" class="font-sans tracking-widest uppercase text-xs text-[#1C1917]/70 hover:text-[#2D6A4F] transition-colors">Browse Genres</a>
+      <a href="/#genres" class="font-sans tracking-widest uppercase text-xs text-[#1C1917]/70 hover:text-[#2D6A4F] transition-colors">Browse Genres</a>
     </nav>
-    <button class="md:hidden text-[#2D6A4F]">
-      <span class="material-symbols-outlined">menu</span>
-    </button>
+    <div class="flex items-center gap-4">
+      {/* Search trigger */}
+      <button
+        id="search-trigger"
+        class="text-[#1C1917] hover:text-[#2D6A4F] transition-colors duration-200"
+        aria-label="Search books"
+      >
+        <span class="material-symbols-outlined text-[22px]">search</span>
+      </button>
+      {/* Mobile menu */}
+      <button class="md:hidden text-[#2D6A4F]">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
   </div>
+  <div class="h-px w-full bg-stone-200/30"></div>
 </header>
+
+{/* Search Overlay */}
+<div id="search-overlay" class="fixed inset-0 z-[100] pointer-events-none opacity-0 transition-opacity duration-300">
+  {/* Backdrop */}
+  <div id="search-backdrop" class="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
+
+  {/* Search Container */}
+  <div class="relative w-full max-w-2xl mx-auto mt-4 md:mt-8 px-4">
+    <div
+      id="search-container"
+      class="bg-white rounded-2xl shadow-[0_24px_64px_-16px_rgba(28,25,23,0.2)] border border-stone-200/40 overflow-hidden transform scale-95 translate-y-[-8px] transition-all duration-300"
+    >
+      {/* Search Input */}
+      <div class="flex items-center gap-3 px-6 py-5 border-b border-stone-100">
+        <span class="material-symbols-outlined text-[#2D6A4F] text-xl">search</span>
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search for a book..."
+          class="flex-1 bg-transparent border-none text-base font-serif text-[#1C1917] placeholder:text-stone-400 focus:outline-none focus:ring-0"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        {/* Loading spinner */}
+        <div id="search-spinner" class="hidden">
+          <svg class="animate-spin h-5 w-5 text-[#2D6A4F]" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" fill="none"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        {/* Close button */}
+        <button id="search-close" class="text-stone-400 hover:text-stone-600 transition-colors">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      {/* Results area */}
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto">
+        {/* Empty state */}
+        <div id="search-empty" class="py-12 text-center">
+          <span class="material-symbols-outlined text-stone-300 text-4xl mb-3 block">auto_stories</span>
+          <p class="font-sans text-sm text-stone-400">Start typing to search our library</p>
+        </div>
+
+        {/* Results list - populated by JS */}
+        <div id="search-list" class="hidden p-2"></div>
+
+        {/* No results */}
+        <div id="search-no-results" class="hidden py-12 text-center">
+          <span class="material-symbols-outlined text-stone-300 text-4xl mb-3 block">search_off</span>
+          <p class="font-sans text-sm text-stone-400">No books found</p>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div id="search-footer" class="hidden bg-[#f5f3ef] px-6 py-3 border-t border-stone-100 flex justify-between items-center">
+        <span id="search-count" class="font-sans text-[10px] uppercase tracking-widest text-stone-400"></span>
+        <span class="font-sans text-[10px] uppercase tracking-widest text-stone-400">
+          <kbd class="px-1.5 py-0.5 bg-white rounded text-[9px] border border-stone-200 mr-1">ESC</kbd> to close
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let searchIndex: any[] | null = null;
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const overlay = document.getElementById("search-overlay")!;
+  const backdrop = document.getElementById("search-backdrop")!;
+  const container = document.getElementById("search-container")!;
+  const input = document.getElementById("search-input") as HTMLInputElement;
+  const trigger = document.getElementById("search-trigger")!;
+  const closeBtn = document.getElementById("search-close")!;
+  const spinner = document.getElementById("search-spinner")!;
+  const emptyState = document.getElementById("search-empty")!;
+  const resultsList = document.getElementById("search-list")!;
+  const noResults = document.getElementById("search-no-results")!;
+  const footer = document.getElementById("search-footer")!;
+  const countEl = document.getElementById("search-count")!;
+
+  function openSearch() {
+    overlay.classList.remove("pointer-events-none", "opacity-0");
+    overlay.classList.add("pointer-events-auto", "opacity-100");
+    container.classList.remove("scale-95", "translate-y-[-8px]");
+    container.classList.add("scale-100", "translate-y-0");
+    input.focus();
+    document.body.style.overflow = "hidden";
+    loadIndex();
+  }
+
+  function closeSearch() {
+    overlay.classList.add("pointer-events-none", "opacity-0");
+    overlay.classList.remove("pointer-events-auto", "opacity-100");
+    container.classList.add("scale-95", "translate-y-[-8px]");
+    container.classList.remove("scale-100", "translate-y-0");
+    document.body.style.overflow = "";
+    input.value = "";
+    resetResults();
+  }
+
+  function resetResults() {
+    emptyState.classList.remove("hidden");
+    resultsList.classList.add("hidden");
+    noResults.classList.add("hidden");
+    footer.classList.add("hidden");
+    resultsList.innerHTML = "";
+  }
+
+  async function loadIndex() {
+    if (searchIndex) return;
+    try {
+      const res = await fetch("/search-index.json");
+      searchIndex = await res.json();
+    } catch (e) {
+      console.error("Failed to load search index:", e);
+    }
+  }
+
+  function performSearch(query: string) {
+    spinner.classList.add("hidden");
+
+    if (!searchIndex || query.length < 2) {
+      resetResults();
+      return;
+    }
+
+    const q = query.toLowerCase();
+    const matches = searchIndex.filter(
+      (b: any) =>
+        b.t.toLowerCase().includes(q) ||
+        b.a.toLowerCase().includes(q)
+    ).slice(0, 8);
+
+    emptyState.classList.add("hidden");
+
+    if (matches.length === 0) {
+      resultsList.classList.add("hidden");
+      noResults.classList.remove("hidden");
+      footer.classList.add("hidden");
+      return;
+    }
+
+    noResults.classList.add("hidden");
+    resultsList.classList.remove("hidden");
+    footer.classList.remove("hidden");
+    countEl.textContent = `${matches.length} result${matches.length === 1 ? "" : "s"} found`;
+
+    resultsList.innerHTML = matches
+      .map(
+        (b: any, i: number) => `
+        <a href="/discover/${b.s}" class="flex items-center gap-4 p-3 rounded-lg hover:bg-[#F2EFE9] transition-colors duration-150 cursor-pointer group no-underline search-result-item" style="animation: searchFadeIn 0.2s ease forwards; animation-delay: ${i * 0.04}s; opacity: 0;">
+          <div class="w-12 h-[4.5rem] flex-shrink-0 rounded-sm overflow-hidden bg-[#efeeea] shadow-sm">
+            ${
+              b.c
+                ? `<img src="${b.c}" alt="${b.t}" class="w-full h-full object-cover" loading="lazy" />`
+                : `<div class="w-full h-full flex items-center justify-center"><span class="text-[8px] text-stone-400 text-center px-1 font-sans">${b.t}</span></div>`
+            }
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span class="font-serif text-sm text-[#1C1917] group-hover:text-[#0f5238] transition-colors truncate">${b.t}</span>
+            <span class="font-sans text-[10px] uppercase tracking-wider text-stone-400 mt-1">${b.a}${b.y ? " \u00B7 " + b.y : ""}</span>
+          </div>
+          <span class="material-symbols-outlined text-stone-300 group-hover:text-[#2D6A4F] text-lg ml-auto transition-colors">arrow_forward</span>
+        </a>`
+      )
+      .join("");
+  }
+
+  // Event listeners
+  trigger.addEventListener("click", openSearch);
+  closeBtn.addEventListener("click", closeSearch);
+  backdrop.addEventListener("click", closeSearch);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeSearch();
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+
+  input.addEventListener("input", () => {
+    const val = input.value.trim();
+    if (val.length < 2) {
+      resetResults();
+      return;
+    }
+
+    // Show spinner
+    spinner.classList.remove("hidden");
+    emptyState.classList.add("hidden");
+
+    // Debounce 400ms
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => performSearch(val), 400);
+  });
+</script>
+
+<style>
+  @keyframes searchFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
