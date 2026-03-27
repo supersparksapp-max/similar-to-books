@@ -42,7 +42,7 @@ const year = book.publishedDate
   : null;
 
 const genreNames = book.genres?.map((g: any) => g.name) ?? [];
-const metaTagParts = [year, ...genreNames].filter(Boolean);
+const metaTagParts = [authorName, year, ...genreNames].filter(Boolean);
 const metaTagString = metaTagParts.join(" \u2022 ").toUpperCase();
 
 // Split writeup into paragraphs at sentence boundaries
@@ -105,20 +105,11 @@ const bookUrl = `/discover/${book.slug}`;
       )}
     </h3>
 
-    {/* Author - mobile only (desktop shows in meta line area) */}
-    <p class="font-sans text-sm text-[#404943]/60 italic md:hidden">
-      by {book.author ? (
-        <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
-          {authorName}
-        </a>
-      ) : authorName}
-    </p>
-
     {/* Why it's similar - mobile label */}
     <h4 class="font-sans text-xs font-bold uppercase tracking-wider text-[#1C1917]/80 md:hidden">Why it's similar</h4>
 
     {/* Writeup */}
-    <div class="font-serif text-base md:text-lg text-[#404943] leading-relaxed space-y-4">
+    <div class="font-serif text-[15px] md:text-base text-[#404943] leading-relaxed space-y-4">
       {paragraphs.map((para) => (
         <p>{para}</p>
       ))}
