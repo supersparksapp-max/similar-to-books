@@ -100,9 +100,7 @@ const authorImageUrl = book.author?.image
     ogType="article"
   />
 
-  <Breadcrumbs items={breadcrumbItems} />
-
-  <main class="max-w-5xl mx-auto px-6 pt-8 md:pt-12">
+  <main class="max-w-5xl mx-auto px-6 pt-4 md:pt-6">
 
     {/* ------------------------------------------------------------------ */}
     {/* Compact Hero Section                                                */}
@@ -267,6 +265,9 @@ const authorImageUrl = book.author?.image
         </div>
       </section>
     )}
+
+    {/* Breadcrumbs at bottom */}
+    <Breadcrumbs items={breadcrumbItems} />
 
   </main>
 
