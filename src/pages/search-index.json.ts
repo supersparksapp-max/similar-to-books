@@ -5,7 +5,7 @@ export const GET: APIRoute = async () => {
   const books = await sanityClient.fetch(
     `*[_type == "book" && status == "published"]{
       title,
-      slug,
+      "slug": slug.current,
       "authorName": author->name,
       publishedDate,
       "coverUrl": coverImage.asset->url,
