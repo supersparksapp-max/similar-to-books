@@ -44,7 +44,7 @@ const seoDescription = `Browse ${books.length} curated book recommendation lists
 
       {/* ---- Left Sidebar: Filters (desktop) ---- */}
       <aside class="hidden md:block w-[260px] flex-shrink-0">
-        <div class="sticky top-28 space-y-12">
+        <div class="sticky top-28 space-y-12 max-h-[calc(100vh-8rem)] overflow-y-auto pr-2 no-scrollbar">
 
           {/* Genres */}
           <div class="space-y-5">
@@ -56,7 +56,7 @@ const seoDescription = `Browse ${books.length} curated book recommendation lists
                   <span class="text-xs">{books.length}</span>
                 </button>
               </li>
-              {genres.filter((g: any) => g.count > 0).map((genre: any) => (
+              {genres.filter((g: any) => g.count > 0).slice(0, 8).map((genre: any) => (
                 <li>
                   <button class="genre-filter-btn flex justify-between items-center w-full group cursor-pointer text-stone-600 hover:text-[#0f5238] transition-colors" data-genre={genre.slug}>
                     <span>{genre.name}</span>
@@ -65,6 +65,21 @@ const seoDescription = `Browse ${books.length} curated book recommendation lists
                 </li>
               ))}
             </ul>
+            {genres.filter((g: any) => g.count > 0).length > 8 && (
+              <ul class="space-y-3 font-sans text-sm tracking-wide text-stone-600 hidden" id="genre-extra-desktop">
+                {genres.filter((g: any) => g.count > 0).slice(8).map((genre: any) => (
+                  <li>
+                    <button class="genre-filter-btn flex justify-between items-center w-full group cursor-pointer text-stone-600 hover:text-[#0f5238] transition-colors" data-genre={genre.slug}>
+                      <span>{genre.name}</span>
+                      <span class="text-xs text-stone-400 group-hover:text-[#0f5238]">{String(genre.count).padStart(2, '0')}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {genres.filter((g: any) => g.count > 0).length > 8 && (
+              <button id="show-more-genres" class="font-sans text-[10px] uppercase tracking-widest text-[#0f5238] font-bold hover:underline">Show more</button>
+            )}
           </div>
 
           {/* Tags */}
@@ -212,13 +227,22 @@ const seoDescription = `Browse ${books.length} curated book recommendation lists
   const noResults = document.getElementById("no-results")!;
   const sortSelect = document.getElementById("sort-select") as HTMLSelectElement;
 
-  const showMoreBtn = document.getElementById("show-more-tags");
+  const showMoreTagsBtn = document.getElementById("show-more-tags");
   const tagsExtra = document.getElementById("tags-extra-desktop");
-  if (showMoreBtn && tagsExtra) {
-    if (tagsExtra.children.length > 0) showMoreBtn.classList.remove("hidden");
-    showMoreBtn.addEventListener("click", () => {
+  if (showMoreTagsBtn && tagsExtra) {
+    if (tagsExtra.children.length > 0) showMoreTagsBtn.classList.remove("hidden");
+    showMoreTagsBtn.addEventListener("click", () => {
       tagsExtra.classList.toggle("hidden");
-      showMoreBtn.textContent = tagsExtra.classList.contains("hidden") ? "Show more" : "Show less";
+      showMoreTagsBtn.textContent = tagsExtra.classList.contains("hidden") ? "Show more" : "Show less";
+    });
+  }
+
+  const showMoreGenresBtn = document.getElementById("show-more-genres");
+  const genresExtra = document.getElementById("genre-extra-desktop");
+  if (showMoreGenresBtn && genresExtra) {
+    showMoreGenresBtn.addEventListener("click", () => {
+      genresExtra.classList.toggle("hidden");
+      showMoreGenresBtn.textContent = genresExtra.classList.contains("hidden") ? "Show more" : "Show less";
     });
   }
 
