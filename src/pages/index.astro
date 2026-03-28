@@ -119,53 +119,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
     )}
   </section>
 
-  <!-- Curator's Choice Section -->
-  {featuredBook && (
-    <section class="bg-[#f5f3ef] py-32">
-      <div class="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-20 items-center">
-        <div class="relative aspect-[3/4] overflow-hidden rounded-lg">
-          {featuredBook.coverImage ? (
-            <a href={`/discover/${featuredBook.slug}`} class="block">
-              <img
-                src={urlFor(featuredBook.coverImage).width(800).height(1066).fit("crop").url()}
-                alt={`${featuredBook.title} by ${featuredBook.author?.name ?? ""} book cover`}
-                class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                loading="lazy"
-              />
-            </a>
-          ) : (
-            <div class="w-full h-full bg-[#efeeea] flex items-center justify-center">
-              <span class="font-serif text-2xl text-[#404943]">{featuredBook.title}</span>
-            </div>
-          )}
-        </div>
-        <div class="flex flex-col gap-8">
-          <span class="font-sans text-[10px] tracking-[0.3em] uppercase font-semibold text-[#0f5238]">Curator's Choice</span>
-          <h2 class="text-4xl md:text-5xl font-serif italic text-[#1C1917] leading-tight">
-            <a href={`/discover/${featuredBook.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
-              Books Like {featuredBook.title}
-            </a>
-          </h2>
-          <div class="space-y-6">
-            {featuredBook.description && (
-              <p class="font-serif text-lg leading-relaxed text-[#404943]">
-                {featuredBook.description}
-              </p>
-            )}
-          </div>
-          <div>
-            <a
-              href={`/discover/${featuredBook.slug}`}
-              class="font-sans text-xs tracking-widest uppercase font-bold text-[#0f5238] inline-flex items-center gap-2 group"
-            >
-              Read the Curation
-              <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
+  <!-- Curator's Choice Section - hidden for now -->
 
   <!-- Browse Recommendations Grid -->
   {books && books.length > 0 && (
