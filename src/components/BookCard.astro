@@ -82,19 +82,14 @@ const bookUrl = `/discover/${book.slug}`;
 
   {/* Content */}
   <div class="flex-1 pt-0 md:pt-2 space-y-4">
-    {/* Meta line */}
-    <div class="flex items-center gap-3">
-      <span class="w-8 h-px bg-[#0f5238] opacity-40 hidden md:block"></span>
-      <div class="font-sans text-[11px] uppercase tracking-[0.2em] text-stone-500 font-semibold flex flex-wrap items-center gap-1">
-        {book.author && (
-          <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName.toUpperCase()}</a>
-        )}
-        {book.author && year && <span class="mx-0.5">&bull;</span>}
-        {year && <span>{year}</span>}
-        {book.genres && book.genres.length > 0 && book.genres.map((genre: any) => (
-          <><span class="mx-0.5">&bull;</span><a href={`/genre/${genre.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{genre.name.toUpperCase()}</a></>
-        ))}
-      </div>
+    {/* Meta tags */}
+    <div class="flex items-center gap-2 flex-wrap font-sans text-[10px] font-bold uppercase tracking-[0.15em] text-stone-500">
+      {year && (
+        <span class="bg-stone-200/50 px-2 py-1 rounded-sm">{year}</span>
+      )}
+      {book.genres && book.genres.length > 0 && book.genres.map((genre: any) => (
+        <a href={`/genre/${genre.slug}`} class="bg-stone-200/50 px-2 py-1 rounded-sm hover:bg-stone-300/50 transition-colors no-underline text-stone-500 hover:text-[#0f5238]">{genre.name}</a>
+      ))}
     </div>
 
     {/* Title */}
@@ -108,8 +103,19 @@ const bookUrl = `/discover/${book.slug}`;
       )}
     </h3>
 
-    {/* Why it's similar - mobile label */}
-    <h4 class="font-sans text-xs font-bold uppercase tracking-wider text-[#1C1917]/80 md:hidden">Why it's similar</h4>
+    {/* Author */}
+    <p class="font-sans uppercase tracking-wider text-xs text-stone-500">
+      BY {book.author ? (
+        <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName.toUpperCase()}</a>
+      ) : (
+        <span>{authorName.toUpperCase()}</span>
+      )}
+    </p>
+
+    {/* Why It's Similar label */}
+    <div class="pt-2">
+      <span class="font-sans text-[10px] font-bold uppercase tracking-widest text-[#2D6A4F]">Why It's Similar</span>
+    </div>
 
     {/* Writeup */}
     <div class="font-serif text-base md:text-lg text-[#404943] leading-relaxed space-y-4">
