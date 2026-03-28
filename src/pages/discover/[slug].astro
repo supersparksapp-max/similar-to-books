@@ -92,9 +92,20 @@ const authorImageUrl = book.author?.image
 // Precompute mobile rec data to avoid complex expressions in template
 function splitWriteup(text: string): string[] {
   const sentences = text?.match(/[^.!?]+[.!?]+/g) || [text || ""];
-  if (sentences.length <= 3) return [text || ""];
-  const mid = Math.ceil(sentences.length / 2);
-  return [sentences.slice(0, mid).join("").trim(), sentences.slice(mid).join("").trim()].filter(Boolean);
+  if (sentences.length <= 2) return [text || ""];
+  if (sentences.length <= 4) {
+    const mid = Math.ceil(sentences.length / 2);
+    return [
+      sentences.slice(0, mid).join("").trim(),
+      sentences.slice(mid).join("").trim(),
+    ].filter(Boolean);
+  }
+  const third = Math.ceil(sentences.length / 3);
+  return [
+    sentences.slice(0, third).join("").trim(),
+    sentences.slice(third, third * 2).join("").trim(),
+    sentences.slice(third * 2).join("").trim(),
+  ].filter(Boolean);
 }
 
 const mobileRecs = sortedRecommendations.map((rec: any) => ({
