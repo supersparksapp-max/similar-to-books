@@ -88,6 +88,25 @@ if (book.introContent && book.introContent.length > 0) {
 const authorImageUrl = book.author?.image
   ? urlFor(book.author.image).width(128).height(128).fit("crop").url()
   : null;
+
+// Precompute mobile rec data to avoid complex expressions in template
+function splitWriteup(text: string): string[] {
+  const sentences = text?.match(/[^.!?]+[.!?]+/g) || [text || ""];
+  if (sentences.length <= 3) return [text || ""];
+  const mid = Math.ceil(sentences.length / 2);
+  return [sentences.slice(0, mid).join("").trim(), sentences.slice(mid).join("").trim()].filter(Boolean);
+}
+
+const mobileRecs = sortedRecommendations.map((rec: any) => ({
+  ...rec,
+  recCoverUrl: rec.book?.coverImage ? urlFor(rec.book.coverImage).width(600).height(900).fit("crop").url() : null,
+  recAuthorName: rec.book?.author?.name ?? "Unknown Author",
+  recYear: rec.book?.publishedDate ? new Date(rec.book.publishedDate).getFullYear() : null,
+  recGenres: rec.book?.genres ?? [],
+  recIsPublished: rec.book?.status === "published",
+  recBookUrl: `/discover/${rec.book?.slug}`,
+  recParagraphs: splitWriteup(rec.writeup),
+}));
 ---
 
 <BaseLayout title={seoTitle} description={seoDescription}>
@@ -122,7 +141,7 @@ const authorImageUrl = book.author?.image
               {year && primaryGenre && <span class="mx-1">&bull;</span>}
               {primaryGenre && <a href={`/genre/${primaryGenre.slug}`} class="hover:underline no-underline">{primaryGenre.name}</a>}
               {book.genres && book.genres.length > 1 && book.genres.slice(1).map((genre: any) => (
-                <><span class="mx-1">&bull;</span><a href={`/genre/${genre.slug}`} class="hover:underline no-underline">{genre.name}</a></>
+                <Fragment><span class="mx-1">&bull;</span><a href={`/genre/${genre.slug}`} class="hover:underline no-underline">{genre.name}</a></Fragment>
               ))}
             </div>
           )}
@@ -239,26 +258,12 @@ const authorImageUrl = book.author?.image
     {/* Mobile Recommendations */}
     {sortedRecommendations.length > 0 && (
       <section class="px-6 space-y-16 py-16">
-        {sortedRecommendations.map((rec: any) => {
-          const recCoverUrl = rec.book?.coverImage ? urlFor(rec.book.coverImage).width(600).height(900).fit("crop").url() : null;
-          const recAuthorName = rec.book?.author?.name ?? "Unknown Author";
-          const recYear = rec.book?.publishedDate ? new Date(rec.book.publishedDate).getFullYear() : null;
-          const recGenres = rec.book?.genres ?? [];
-          const recIsPublished = rec.book?.status === "published";
-          const recBookUrl = `/discover/${rec.book?.slug}`;
-
-          const recSentences = rec.writeup?.match(/[^.!?]+[.!?]+/g) || [rec.writeup || ""];
-          const recMidpoint = Math.ceil(recSentences.length / 2);
-          const recParagraphs = recSentences.length <= 3
-            ? [rec.writeup || ""]
-            : [recSentences.slice(0, recMidpoint).join("").trim(), recSentences.slice(recMidpoint).join("").trim()].filter(Boolean);
-
-          return (
+        {mobileRecs.map((rec: any) => (
             <article class="flex flex-col">
               {/* Cover in container */}
               <div class="bg-[#f5f3ef] rounded-xl p-6 mb-6">
-                {recCoverUrl ? (
-                  <img src={recCoverUrl} alt={`${rec.book?.title} book cover`} loading="lazy" class="w-full aspect-[3/4] object-cover rounded shadow-lg" />
+                {rec.recCoverUrl ? (
+                  <img src={rec.recCoverUrl} alt={`${rec.book?.title} book cover`} loading="lazy" class="w-full aspect-[3/4] object-cover rounded shadow-lg" />
                 ) : (
                   <div class="w-full aspect-[3/4] bg-[#e5e2dc] rounded flex items-center justify-center p-6">
                     <span class="font-serif text-lg text-[#404943] text-center">{rec.book?.title}</span>
@@ -268,31 +273,31 @@ const authorImageUrl = book.author?.image
 
               {/* Meta tags */}
               <div class="flex gap-2 mb-4 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
-                {recYear && <span class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#404943] bg-[#efeeea] px-2 py-1 rounded whitespace-nowrap">{recYear}</span>}
-                {recGenres.map((genre: any) => (
+                {rec.recYear && <span class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#404943] bg-[#efeeea] px-2 py-1 rounded whitespace-nowrap">{rec.recYear}</span>}
+                {rec.recGenres.map((genre: any) => (
                   <a href={`/genre/${genre.slug}`} class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#404943] bg-[#efeeea] px-2 py-1 rounded whitespace-nowrap no-underline hover:bg-[#e5e2dc]">{genre.name}</a>
                 ))}
               </div>
 
               {/* Title */}
               <h3 class="font-serif text-2xl font-bold mb-1 text-[#1C1917]">
-                {recIsPublished ? (
-                  <a href={recBookUrl} class="no-underline hover:text-[#0f5238] transition-colors">{rec.book?.title}</a>
+                {rec.recIsPublished ? (
+                  <a href={rec.recBookUrl} class="no-underline hover:text-[#0f5238] transition-colors">{rec.book?.title}</a>
                 ) : rec.book?.title}
               </h3>
 
               {/* Author */}
               <p class="font-serif italic text-[#404943] mb-6">
                 by {rec.book?.author ? (
-                  <a href={`/author/${rec.book.author.slug}`} class="no-underline hover:underline">{recAuthorName}</a>
-                ) : recAuthorName}
+                  <a href={`/author/${rec.book.author.slug}`} class="no-underline hover:underline">{rec.recAuthorName}</a>
+                ) : rec.recAuthorName}
               </p>
 
               {/* Why it's similar */}
               <div class="mb-6">
                 <p class="font-sans text-[11px] font-bold text-[#0f5238] tracking-widest uppercase mb-2">WHY IT'S SIMILAR</p>
                 <div class="space-y-3 text-sm leading-relaxed text-[#1C1917] font-serif">
-                  {recParagraphs.map((para: string) => <p>{para}</p>)}
+                  {rec.recParagraphs.map((para: string) => <p>{para}</p>)}
                 </div>
               </div>
 
@@ -308,8 +313,8 @@ const authorImageUrl = book.author?.image
 
               {/* Actions */}
               <div class="space-y-3">
-                {recIsPublished && (
-                  <a href={recBookUrl} class="block text-center text-[#0f5238] font-sans text-xs uppercase tracking-widest font-bold py-3">
+                {rec.recIsPublished && (
+                  <a href={rec.recBookUrl} class="block text-center text-[#0f5238] font-sans text-xs uppercase tracking-widest font-bold py-3">
                     Read Review
                   </a>
                 )}
@@ -320,8 +325,7 @@ const authorImageUrl = book.author?.image
                 )}
               </div>
             </article>
-          );
-        })}
+        ))}
       </section>
     )}
 
