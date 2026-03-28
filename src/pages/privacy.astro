@@ -1,0 +1,116 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SEOHead from "../components/SEOHead.astro";
+
+const title = "Privacy Policy — Similar To Books Chrome Extension";
+const description = "Privacy policy for the Similar To Books Chrome extension. Learn how we handle your data.";
+const canonicalUrl = "https://www.similartobooks.com/privacy";
+---
+
+<BaseLayout title={title} description={description}>
+  <SEOHead
+    slot="head"
+    title={title}
+    description={description}
+    canonicalUrl={canonicalUrl}
+    ogType="website"
+  />
+
+  <main class="max-w-3xl mx-auto px-6 py-16 md:py-24">
+    <h1 class="font-serif text-3xl md:text-4xl font-bold text-[#1C1917] mb-2">Privacy Policy</h1>
+    <p class="font-sans text-sm text-stone-500 uppercase tracking-wider mb-12">Similar To Books Chrome Extension</p>
+
+    <p class="font-sans text-xs text-stone-400 uppercase tracking-widest mb-12">Last updated: March 27, 2026</p>
+
+    <div class="prose-stb space-y-10">
+      <p class="font-serif text-lg text-[#404943] leading-relaxed">
+        Similar To Books ("we", "us") operates the Similar To Books Chrome extension. This policy describes how the extension handles user data.
+      </p>
+
+      <section class="space-y-4">
+        <h2 class="font-serif text-2xl font-bold text-[#1C1917]">Data Collection</h2>
+        <p class="font-serif text-base text-[#404943] leading-relaxed">
+          The Similar To Books extension does not collect, store, or transmit any personal data. Specifically:
+        </p>
+        <ul class="space-y-2 pl-4">
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span>No browsing history is collected or tracked</span>
+          </li>
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span>No personal information is gathered</span>
+          </li>
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span>No analytics or tracking scripts are used</span>
+          </li>
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span>No cookies are set</span>
+          </li>
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span>No data is sold or shared with third parties</span>
+          </li>
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span>No user accounts are required</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-serif text-2xl font-bold text-[#1C1917]">How the Extension Works</h2>
+        <p class="font-serif text-base text-[#404943] leading-relaxed">
+          When you visit an Amazon book page, the extension reads the book title from the page to check if recommendations are available on SimilarToBooks.com. This check is performed by querying our public content database (Sanity.io). No information about you or your browsing is stored during this process.
+        </p>
+        <p class="font-serif text-base text-[#404943] leading-relaxed">
+          The extension stores a single preference locally on your device (whether auto-recommend is enabled). This setting never leaves your browser.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-serif text-2xl font-bold text-[#1C1917]">Permissions</h2>
+        <p class="font-serif text-base text-[#404943] leading-relaxed">
+          The extension requests the following browser permissions:
+        </p>
+        <ul class="space-y-2 pl-4">
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span><strong class="text-[#1C1917]">Active Tab & Scripting:</strong> To read the book title from Amazon product pages</span>
+          </li>
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span><strong class="text-[#1C1917]">Storage:</strong> To save your auto-recommend preference locally</span>
+          </li>
+          <li class="font-serif text-base text-[#404943] leading-relaxed flex items-start gap-2">
+            <span class="text-[#0f5238] mt-1.5 text-xs">&#9679;</span>
+            <span><strong class="text-[#1C1917]">Host Permissions:</strong> To fetch book recommendations from our content database</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-serif text-2xl font-bold text-[#1C1917]">Third-Party Services</h2>
+        <p class="font-serif text-base text-[#404943] leading-relaxed">
+          The extension queries Sanity.io to retrieve book recommendation data. No user information is included in these requests. Sanity's privacy policy is available at <a href="https://www.sanity.io/legal/privacy" target="_blank" rel="noopener noreferrer" class="text-[#0f5238] underline hover:text-[#2D6A4F] transition-colors">sanity.io/legal/privacy</a>.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-serif text-2xl font-bold text-[#1C1917]">Changes</h2>
+        <p class="font-serif text-base text-[#404943] leading-relaxed">
+          We may update this policy from time to time. Changes will be posted on this page.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-serif text-2xl font-bold text-[#1C1917]">Contact</h2>
+        <p class="font-serif text-base text-[#404943] leading-relaxed">
+          Questions about this policy can be directed to <a href="mailto:supersparksapp@gmail.com" class="text-[#0f5238] underline hover:text-[#2D6A4F] transition-colors">supersparksapp@gmail.com</a>.
+        </p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
