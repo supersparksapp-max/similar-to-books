@@ -192,7 +192,7 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
 
     {book.introContent && book.introContent.length > 1 && (
       <section class="mb-24 md:mb-32 pt-16 border-t border-stone-200/40">
-        <h2 class="font-serif text-2xl md:text-3xl font-bold text-[#1C1917] mb-8">Why These Books Are Similar to {book.title}</h2>
+        <h2 class="font-serif text-2xl md:text-3xl font-bold text-[#1C1917] mb-8">Why Are These Books Similar To {book.title}?</h2>
         <div class="about-content font-serif text-lg leading-relaxed text-[#404943] space-y-6 max-w-3xl">
           <PortableText value={book.introContent.slice(1)} />
         </div>
@@ -343,7 +343,7 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
     {/* Mobile About */}
     {book.introContent && book.introContent.length > 1 && (
       <section class="mx-6 p-8 bg-[#e4e2de] rounded-xl">
-        <h3 class="font-serif text-xl font-bold mb-4 text-[#1C1917]">Why These Books Are Similar to {book.title}</h3>
+        <h3 class="font-serif text-xl font-bold mb-4 text-[#1C1917]">Why Are These Books Similar To {book.title}?</h3>
         <div class="space-y-4 text-sm leading-relaxed text-[#404943] italic font-serif">
           <PortableText value={book.introContent.slice(1)} />
         </div>
