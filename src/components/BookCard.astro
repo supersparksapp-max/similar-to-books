@@ -93,7 +93,7 @@ const bookUrl = `/discover/${book.slug}`;
     </div>
 
     {/* Title */}
-    <h3 class="font-serif text-2xl md:text-3xl font-bold leading-tight text-[#1C1917]">
+    <h3 class="font-serif text-2xl md:text-3xl font-bold leading-tight text-[#1C1917] !mt-2">
       {isPublished ? (
         <a href={bookUrl} class="hover:text-[#0f5238] transition-colors no-underline">
           {book.title}
@@ -104,7 +104,7 @@ const bookUrl = `/discover/${book.slug}`;
     </h3>
 
     {/* Author */}
-    <p class="font-sans uppercase tracking-wider text-xs text-stone-500">
+    <p class="font-sans uppercase tracking-wider text-xs text-stone-500 !mt-1">
       BY {book.author ? (
         <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName.toUpperCase()}</a>
       ) : (

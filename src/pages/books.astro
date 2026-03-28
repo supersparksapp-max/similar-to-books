@@ -1,0 +1,336 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SEOHead from "../components/SEOHead.astro";
+import { sanityClient } from "sanity:client";
+import { urlFor } from "../utils/seo";
+
+const books = await sanityClient.fetch(
+  `*[_type == "book" && status == "published" && defined(slug.current)]{
+    _id,
+    title,
+    "slug": slug.current,
+    "authorName": author->name,
+    "authorSlug": author->slug.current,
+    publishedDate,
+    "genres": genres[]->{name, "slug": slug.current},
+    "tags": tags[]->{name, "slug": slug.current},
+    coverImage,
+  }|order(title asc)`
+);
+
+const genres = await sanityClient.fetch(
+  `*[_type == "genre"]{name, "slug": slug.current, "count": count(*[_type == "book" && status == "published" && references(^._id)])}|order(name asc)`
+);
+
+const tags = await sanityClient.fetch(
+  `*[_type == "tag"]{name, "slug": slug.current, "count": count(*[_type == "book" && status == "published" && references(^._id)])}|order(name asc)[0...30]`
+);
+
+const seoTitle = "All Books | Similar To Books";
+const seoDescription = "Browse our complete library of book recommendations. Find your next read filtered by genre, tag, or sorted by title, author, or year.";
+---
+
+<BaseLayout title={seoTitle} description={seoDescription}>
+  <SEOHead
+    slot="head"
+    title={seoTitle}
+    description={seoDescription}
+    canonicalUrl="https://www.similartobooks.com/books"
+    ogType="website"
+  />
+
+  <main class="max-w-7xl mx-auto px-6 md:px-8 py-12 md:py-16">
+    <div class="flex flex-col md:flex-row gap-12 md:gap-16">
+
+      {/* ---- Left Sidebar: Filters (desktop) ---- */}
+      <aside class="hidden md:block w-[260px] flex-shrink-0">
+        <div class="sticky top-28 space-y-12">
+
+          {/* Genres */}
+          <div class="space-y-5">
+            <h2 class="font-serif text-xl text-[#1C1917]">Genres</h2>
+            <ul class="space-y-3 font-sans text-sm tracking-wide text-stone-600" id="genre-list-desktop">
+              <li>
+                <button class="genre-filter-btn flex justify-between items-center w-full group cursor-pointer text-[#0f5238] font-bold transition-colors" data-genre="all">
+                  <span>All Books</span>
+                  <span class="text-xs">{books.length}</span>
+                </button>
+              </li>
+              {genres.filter((g: any) => g.count > 0).map((genre: any) => (
+                <li>
+                  <button class="genre-filter-btn flex justify-between items-center w-full group cursor-pointer text-stone-600 hover:text-[#0f5238] transition-colors" data-genre={genre.slug}>
+                    <span>{genre.name}</span>
+                    <span class="text-xs text-stone-400 group-hover:text-[#0f5238]">{String(genre.count).padStart(2, '0')}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Tags */}
+          <div class="space-y-5">
+            <div class="flex justify-between items-center">
+              <h2 class="font-serif text-xl text-[#1C1917]">Tags</h2>
+              <button id="show-more-tags" class="font-sans text-[10px] uppercase tracking-widest text-[#0f5238] font-bold hover:underline hidden">Show more</button>
+            </div>
+            <div class="flex flex-wrap gap-2" id="tags-container-desktop">
+              {tags.filter((t: any) => t.count > 0).slice(0, 8).map((tag: any) => (
+                <button class="tag-filter-btn px-4 py-2 rounded-full bg-[#eae8e4] text-[#404943] font-sans text-xs uppercase tracking-widest hover:bg-[#0f5238] hover:text-white transition-all duration-300" data-tag={tag.slug}>
+                  {tag.name}
+                </button>
+              ))}
+            </div>
+            <div class="flex flex-wrap gap-2 hidden" id="tags-extra-desktop">
+              {tags.filter((t: any) => t.count > 0).slice(8).map((tag: any) => (
+                <button class="tag-filter-btn px-4 py-2 rounded-full bg-[#eae8e4] text-[#404943] font-sans text-xs uppercase tracking-widest hover:bg-[#0f5238] hover:text-white transition-all duration-300" data-tag={tag.slug}>
+                  {tag.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* ---- Mobile Filters ---- */}
+      <div class="md:hidden space-y-6">
+        {/* Mobile genre pills - horizontal scroll */}
+        <div class="overflow-x-auto no-scrollbar -mx-6 px-6">
+          <div class="flex gap-2 pb-2" id="genre-pills-mobile">
+            <button class="genre-filter-btn px-4 py-2 rounded-full bg-[#0f5238] text-white font-sans text-xs uppercase tracking-widest whitespace-nowrap flex-shrink-0" data-genre="all">All</button>
+            {genres.filter((g: any) => g.count > 0).map((genre: any) => (
+              <button class="genre-filter-btn px-4 py-2 rounded-full bg-[#eae8e4] text-[#404943] font-sans text-xs uppercase tracking-widest whitespace-nowrap flex-shrink-0 hover:bg-[#0f5238] hover:text-white transition-all" data-genre={genre.slug}>
+                {genre.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile tag pills */}
+        <div class="overflow-x-auto no-scrollbar -mx-6 px-6">
+          <div class="flex gap-2 pb-2" id="tag-pills-mobile">
+            {tags.filter((t: any) => t.count > 0).slice(0, 10).map((tag: any) => (
+              <button class="tag-filter-btn px-3 py-1.5 rounded-full bg-[#f5f3ef] border border-[#0f5238]/10 text-[#404943] font-sans text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 hover:bg-[#0f5238] hover:text-white hover:border-[#0f5238] transition-all" data-tag={tag.slug}>
+                {tag.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ---- Main Content ---- */}
+      <section class="flex-1">
+        <header class="mb-12 md:mb-16">
+          <h1 class="font-serif text-4xl md:text-5xl text-[#1C1917] mb-4">The Library</h1>
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <p class="font-serif italic text-stone-500 max-w-lg leading-relaxed text-sm md:text-base">
+              Browse our complete collection of curated book recommendations, filtered by genre and tag.
+            </p>
+            {/* Sort */}
+            <div class="flex items-center gap-4 flex-shrink-0">
+              <span class="font-sans text-[10px] tracking-widest uppercase text-stone-400">Sort By</span>
+              <div class="relative">
+                <select id="sort-select" class="appearance-none bg-transparent border-b border-[#bfc9c1]/30 focus:border-[#0f5238] focus:ring-0 py-1 pl-0 pr-8 font-sans text-xs uppercase tracking-widest text-[#1C1917] cursor-pointer transition-colors outline-none">
+                  <option value="title-asc">Title (A-Z)</option>
+                  <option value="title-desc">Title (Z-A)</option>
+                  <option value="year-desc">Newest First</option>
+                  <option value="year-asc">Oldest First</option>
+                  <option value="author-asc">Author (A-Z)</option>
+                </select>
+                <span class="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none material-symbols-outlined text-sm text-stone-400">expand_more</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Results count */}
+        <div class="mb-8 font-sans text-[10px] uppercase tracking-widest text-stone-400">
+          <span id="results-count">{books.length}</span> books
+        </div>
+
+        {/* Book Grid */}
+        <div id="book-grid" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-6 md:gap-x-10 gap-y-12 md:gap-y-20">
+          {books.map((book: any) => {
+            const coverUrl = book.coverImage
+              ? urlFor(book.coverImage).width(400).height(600).fit("crop").url()
+              : null;
+            const year = book.publishedDate ? new Date(book.publishedDate).getFullYear() : null;
+            const genreSlugs = book.genres?.map((g: any) => g.slug).join(",") ?? "";
+            const tagSlugs = book.tags?.map((t: any) => t.slug).join(",") ?? "";
+            const genreName = book.genres?.[0]?.name ?? "";
+
+            return (
+              <a
+                href={`/discover/${book.slug}`}
+                class="book-card group cursor-pointer no-underline"
+                data-title={book.title.toLowerCase()}
+                data-author={(book.authorName ?? "").toLowerCase()}
+                data-year={year ?? ""}
+                data-genres={genreSlugs}
+                data-tags={tagSlugs}
+              >
+                <div class="aspect-[3/4] overflow-hidden rounded-sm bg-[#efeeea] mb-4 md:mb-6 relative transition-transform duration-500 group-hover:-translate-y-2">
+                  {coverUrl ? (
+                    <img
+                      src={coverUrl}
+                      alt={`${book.title} book cover`}
+                      loading="lazy"
+                      class="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center p-4">
+                      <span class="font-serif text-sm text-stone-400 text-center">{book.title}</span>
+                    </div>
+                  )}
+                  <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
+                </div>
+                <div class="space-y-1">
+                  <h3 class="font-serif text-base md:text-xl text-[#1C1917] group-hover:text-[#0f5238] transition-colors leading-snug">{book.title}</h3>
+                  <p class="font-sans text-[10px] tracking-[0.2em] uppercase text-stone-400">{book.authorName}</p>
+                  {(year || genreName) && (
+                    <div class="flex items-center gap-2 pt-1 font-sans text-[10px] tracking-widest uppercase text-stone-500">
+                      {year && <span>{year}</span>}
+                      {year && genreName && <span class="w-1 h-1 bg-[#bfc9c1] rounded-full"></span>}
+                      {genreName && <span>{genreName}</span>}
+                    </div>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        {/* No results */}
+        <div id="no-results" class="hidden py-20 text-center">
+          <span class="material-symbols-outlined text-stone-300 text-4xl mb-3 block">search_off</span>
+          <p class="font-sans text-sm text-stone-400">No books match your filters</p>
+          <button id="clear-filters" class="mt-4 font-sans text-xs uppercase tracking-widest text-[#0f5238] font-bold hover:underline">Clear all filters</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<script>
+  let activeGenre = "all";
+  let activeTag: string | null = null;
+
+  const grid = document.getElementById("book-grid")!;
+  const cards = Array.from(grid.querySelectorAll(".book-card")) as HTMLElement[];
+  const countEl = document.getElementById("results-count")!;
+  const noResults = document.getElementById("no-results")!;
+  const sortSelect = document.getElementById("sort-select") as HTMLSelectElement;
+
+  // Show more tags
+  const showMoreBtn = document.getElementById("show-more-tags");
+  const tagsExtra = document.getElementById("tags-extra-desktop");
+  if (showMoreBtn && tagsExtra) {
+    if (tagsExtra.children.length > 0) showMoreBtn.classList.remove("hidden");
+    showMoreBtn.addEventListener("click", () => {
+      tagsExtra.classList.toggle("hidden");
+      showMoreBtn.textContent = tagsExtra.classList.contains("hidden") ? "Show more" : "Show less";
+    });
+  }
+
+  function filterBooks() {
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const genres = card.dataset.genres ?? "";
+      const tags = card.dataset.tags ?? "";
+
+      const matchesGenre = activeGenre === "all" || genres.split(",").includes(activeGenre);
+      const matchesTag = !activeTag || tags.split(",").includes(activeTag);
+
+      if (matchesGenre && matchesTag) {
+        card.style.display = "";
+        visibleCount++;
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    countEl.textContent = String(visibleCount);
+    noResults.classList.toggle("hidden", visibleCount > 0);
+    grid.classList.toggle("hidden", visibleCount === 0);
+  }
+
+  function updateGenreButtons() {
+    document.querySelectorAll(".genre-filter-btn").forEach((btn) => {
+      const el = btn as HTMLElement;
+      const isActive = el.dataset.genre === activeGenre;
+      if (el.closest("#genre-list-desktop")) {
+        // Desktop sidebar style
+        el.className = `genre-filter-btn flex justify-between items-center w-full group cursor-pointer transition-colors ${isActive ? "text-[#0f5238] font-bold" : "text-stone-600 hover:text-[#0f5238]"}`;
+      } else {
+        // Mobile pill style
+        el.className = `genre-filter-btn px-4 py-2 rounded-full font-sans text-xs uppercase tracking-widest whitespace-nowrap flex-shrink-0 transition-all ${isActive ? "bg-[#0f5238] text-white" : "bg-[#eae8e4] text-[#404943] hover:bg-[#0f5238] hover:text-white"}`;
+      }
+    });
+  }
+
+  function updateTagButtons() {
+    document.querySelectorAll(".tag-filter-btn").forEach((btn) => {
+      const el = btn as HTMLElement;
+      const isActive = el.dataset.tag === activeTag;
+      if (el.closest("#tags-container-desktop") || el.closest("#tags-extra-desktop")) {
+        el.className = `tag-filter-btn px-4 py-2 rounded-full font-sans text-xs uppercase tracking-widest transition-all duration-300 ${isActive ? "bg-[#0f5238] text-white" : "bg-[#eae8e4] text-[#404943] hover:bg-[#0f5238] hover:text-white"}`;
+      } else {
+        el.className = `tag-filter-btn px-3 py-1.5 rounded-full font-sans text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 transition-all ${isActive ? "bg-[#0f5238] text-white border-[#0f5238]" : "bg-[#f5f3ef] border border-[#0f5238]/10 text-[#404943] hover:bg-[#0f5238] hover:text-white hover:border-[#0f5238]"}`;
+      }
+    });
+  }
+
+  // Genre filter clicks
+  document.querySelectorAll(".genre-filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      activeGenre = (btn as HTMLElement).dataset.genre ?? "all";
+      updateGenreButtons();
+      filterBooks();
+    });
+  });
+
+  // Tag filter clicks
+  document.querySelectorAll(".tag-filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tag = (btn as HTMLElement).dataset.tag ?? "";
+      activeTag = activeTag === tag ? null : tag; // toggle
+      updateTagButtons();
+      filterBooks();
+    });
+  });
+
+  // Sort
+  sortSelect.addEventListener("change", () => {
+    const val = sortSelect.value;
+    const sorted = [...cards].sort((a, b) => {
+      switch (val) {
+        case "title-asc":
+          return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
+        case "title-desc":
+          return (b.dataset.title ?? "").localeCompare(a.dataset.title ?? "");
+        case "year-desc":
+          return Number(b.dataset.year || 0) - Number(a.dataset.year || 0);
+        case "year-asc":
+          return Number(a.dataset.year || 9999) - Number(b.dataset.year || 9999);
+        case "author-asc":
+          return (a.dataset.author ?? "").localeCompare(b.dataset.author ?? "");
+        default:
+          return 0;
+      }
+    });
+    sorted.forEach((card) => grid.appendChild(card));
+  });
+
+  // Clear filters
+  document.getElementById("clear-filters")?.addEventListener("click", () => {
+    activeGenre = "all";
+    activeTag = null;
+    updateGenreButtons();
+    updateTagButtons();
+    filterBooks();
+  });
+</script>
