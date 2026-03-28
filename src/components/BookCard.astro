@@ -135,15 +135,14 @@ const bookUrl = `/discover/${book.slug}`;
 
     {/* Common Elements */}
     {commonElements && commonElements.length > 0 && (
-      <div class="p-5 bg-[#0f5238]/5 rounded-xl border-l-2 border-[#0f5238]/20 space-y-3 mt-6">
-        <h4 class="font-sans text-[10px] font-bold uppercase tracking-widest text-[#0f5238]">
+      <div class="border-l-2 border-[#2D6A4F]/20 pl-4 py-1 mt-6 space-y-3">
+        <h4 class="font-sans text-[11px] font-bold uppercase tracking-widest text-[#404943]">
           Elements in Common{parentBookTitle ? ` with ${parentBookTitle}` : ""}
         </h4>
         <ul class="space-y-2">
           {commonElements.map((element) => (
-            <li class="flex items-start gap-2 text-sm font-sans text-[#404943]">
-              <span class="text-[#0f5238] mt-1 text-[10px]">&#9679;</span>
-              {element}
+            <li class="text-sm font-serif text-[#404943] italic">
+              &#8226; {element}
             </li>
           ))}
         </ul>
