@@ -153,37 +153,36 @@ const seoDescription = `Browse ${books.length} curated book recommendation lists
             const genreName = book.genres?.[0]?.name ?? "";
 
             return (
-              <a
-                href={`/discover/${book.slug}`}
-                class="book-card group cursor-pointer no-underline"
+              <div
+                class="book-card group"
                 data-title={book.title.toLowerCase()}
                 data-author={(book.authorName ?? "").toLowerCase()}
                 data-year={year ?? ""}
                 data-genres={genreSlugs}
                 data-tags={tagSlugs}
               >
-                <div class="aspect-[3/4] overflow-hidden rounded-sm bg-[#efeeea] mb-4 md:mb-6 relative transition-transform duration-500 group-hover:-translate-y-2">
-                  {coverUrl ? (
-                    <img src={coverUrl} alt={`${book.title} book cover`} loading="lazy" class="w-full h-full object-cover" />
-                  ) : (
-                    <div class="w-full h-full flex items-center justify-center p-4">
-                      <span class="font-serif text-sm text-stone-400 text-center">{book.title}</span>
-                    </div>
-                  )}
-                  <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
-                </div>
-                <div class="space-y-1">
-                  <h3 class="font-serif text-base md:text-xl text-[#1C1917] group-hover:text-[#0f5238] transition-colors leading-snug">{book.title}</h3>
-                  <p class="font-sans text-[10px] tracking-[0.2em] uppercase text-stone-400 italic">{book.authorName}</p>
-                  {(year || genreName) && (
-                    <div class="flex items-center gap-2 pt-1 font-sans text-[10px] tracking-widest uppercase text-stone-500">
-                      {year && <span>{year}</span>}
-                      {year && genreName && <span class="w-1 h-1 bg-[#bfc9c1] rounded-full"></span>}
-                      {genreName && <span>{genreName}</span>}
-                    </div>
-                  )}
-                </div>
-              </a>
+                <a href={`/discover/${book.slug}`} class="block no-underline">
+                  <div class="bg-[#F2EFE9] p-6 md:p-8 aspect-[2/3] mb-4 md:mb-6 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-2">
+                    {coverUrl ? (
+                      <img src={coverUrl} alt={`${book.title} book cover`} loading="lazy" class="w-full h-full object-cover" style="box-shadow: 8px 16px 32px rgba(28,25,23,0.12);" />
+                    ) : (
+                      <span class="font-serif text-sm text-[#404943] text-center px-4">{book.title}</span>
+                    )}
+                  </div>
+                </a>
+                {genreName && (
+                  <span class="font-sans text-[9px] tracking-[0.2em] uppercase font-bold text-[#0f5238] mb-2 block">{genreName}</span>
+                )}
+                <h3 class="font-serif text-base md:text-xl text-[#1C1917] mb-1">
+                  <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
+                </h3>
+                <p class="font-sans text-xs text-[#404943] tracking-wider font-light">
+                  {book.authorSlug ? (
+                    <a href={`/author/${book.authorSlug}`} class="hover:text-[#0f5238] transition-colors no-underline">{book.authorName}</a>
+                  ) : book.authorName}
+                  {year ? `, ${year}` : ""}
+                </p>
+              </div>
             );
           })}
         </div>
