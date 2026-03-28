@@ -100,84 +100,43 @@ const authorImageUrl = book.author?.image
     ogType="article"
   />
 
-  <main class="max-w-5xl mx-auto px-6 pt-4 md:pt-6">
-
-    {/* ------------------------------------------------------------------ */}
-    {/* Compact Hero Section                                                */}
-    {/* ------------------------------------------------------------------ */}
-    <section class="mb-12 md:mb-16">
-      {/* Desktop: inline cover + title */}
-      <div class="flex flex-col md:flex-row items-start md:items-end gap-6 mb-8">
-        {/* Small tilted cover - desktop only */}
-        <div class="hidden md:block w-24 md:w-32 shrink-0 shadow-lg rotate-[-2deg] bg-[#efeeea] overflow-hidden rounded-sm">
+  {/* ================================================================== */}
+  {/* DESKTOP LAYOUT                                                      */}
+  {/* ================================================================== */}
+  <main class="hidden md:block max-w-5xl mx-auto px-6 pt-6">
+    <section class="mb-16">
+      <div class="flex flex-row items-end gap-6 mb-8">
+        <div class="w-32 shrink-0 shadow-lg rotate-[-2deg] bg-[#efeeea] overflow-hidden rounded-sm">
           {heroImageUrl ? (
-            <img
-              src={heroImageUrl}
-              alt={`${book.title} by ${authorName} book cover`}
-              class="w-full h-auto block aspect-[2/3] object-cover"
-              loading="eager"
-            />
+            <img src={heroImageUrl} alt={`${book.title} by ${authorName} book cover`} class="w-full h-auto block aspect-[2/3] object-cover" loading="eager" />
           ) : (
             <div class="w-full aspect-[2/3] bg-[#e5e2dc] flex items-center justify-center p-4">
               <span class="font-serif text-sm text-[#404943] text-center">{book.title}</span>
             </div>
           )}
         </div>
-
         <div class="flex-1">
           {(year || primaryGenre) && (
             <div class="font-sans text-[11px] uppercase tracking-[0.2em] text-[#0f5238] font-bold mb-2 flex flex-wrap items-center gap-1">
               {year && <span>{year}</span>}
               {year && primaryGenre && <span class="mx-1">&bull;</span>}
-              {primaryGenre && (
-                <a href={`/genre/${primaryGenre.slug}`} class="hover:underline no-underline">{primaryGenre.name}</a>
-              )}
+              {primaryGenre && <a href={`/genre/${primaryGenre.slug}`} class="hover:underline no-underline">{primaryGenre.name}</a>}
               {book.genres && book.genres.length > 1 && book.genres.slice(1).map((genre: any) => (
                 <><span class="mx-1">&bull;</span><a href={`/genre/${genre.slug}`} class="hover:underline no-underline">{genre.name}</a></>
               ))}
             </div>
           )}
-          <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-tight text-[#1C1917] leading-tight mb-2">
-            {book.title}
-          </h2>
+          <h2 class="font-serif text-5xl font-bold tracking-tight text-[#1C1917] leading-tight mb-2">{book.title}</h2>
           <p class="font-sans text-[11px] uppercase tracking-[0.2em] text-stone-500 font-semibold">
             BY {book.author ? (
-              <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">
-                {authorName.toUpperCase()}
-              </a>
-            ) : (
-              authorName.toUpperCase()
-            )}
+              <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName.toUpperCase()}</a>
+            ) : authorName.toUpperCase()}
           </p>
         </div>
       </div>
-
-      {/* Mobile: full cover image */}
-      <div class="md:hidden mb-8">
-        {heroImageUrl ? (
-          <div class="relative w-full aspect-[2/3] rounded-lg overflow-hidden shadow-[0_8px_32px_-4px_rgba(28,25,23,0.08)] bg-[#f5f3ef]">
-            <img
-              src={heroImageUrl}
-              alt={`${book.title} by ${authorName} book cover`}
-              class="w-full h-full object-cover"
-              loading="eager"
-            />
-          </div>
-        ) : (
-          <div class="w-full aspect-[2/3] bg-[#e5e2dc] rounded-lg flex items-center justify-center p-8">
-            <span class="font-serif text-2xl text-[#404943] text-center">{book.title}</span>
-          </div>
-        )}
-      </div>
-
-      {/* Intro text */}
       <div class="py-8 border-t border-stone-200/40">
         {introQuote ? (
-          <div class="space-y-4">
-            <p class="text-lg font-serif leading-relaxed text-[#404943]">
-              {introQuote}
-            </p>
-          </div>
+          <p class="text-lg font-serif leading-relaxed text-[#404943]">{introQuote}</p>
         ) : (
           <p class="text-lg font-serif leading-relaxed text-[#404943]">
             Discover the best books like {book.title} by {authorName}. These carefully selected recommendations share similar themes, writing style, and appeal.
@@ -186,41 +145,21 @@ const authorImageUrl = book.author?.image
       </div>
     </section>
 
-    {/* ------------------------------------------------------------------ */}
-    {/* Recommendations Section                                             */}
-    {/* ------------------------------------------------------------------ */}
     {sortedRecommendations.length > 0 && (
       <section>
-        {/* Desktop H1 */}
-        <div class="hidden md:block mb-10">
+        <div class="mb-10">
           <h1 class="font-serif text-3xl md:text-4xl font-bold text-[#1C1917] pb-4 border-b border-stone-200/60">
             {recCount} Books Like {book.title}
           </h1>
         </div>
-        {/* Mobile H1 */}
-        <div class="md:hidden mb-12">
-          <h1 class="text-3xl font-serif font-bold text-[#1C1917] tracking-tight border-l-4 border-[#0f5238] pl-4">
-            {recCount} Books Like {book.title}
-          </h1>
-        </div>
-
         <div class="space-y-20 mb-24">
           {sortedRecommendations.map((rec: any) => (
-            <BookCard
-              book={rec.book}
-              writeup={rec.writeup}
-              rank={rec.rank ?? 0}
-              commonElements={rec.commonElements}
-              parentBookTitle={book.title}
-            />
+            <BookCard book={rec.book} writeup={rec.writeup} rank={rec.rank ?? 0} commonElements={rec.commonElements} parentBookTitle={book.title} />
           ))}
         </div>
       </section>
     )}
 
-    {/* ------------------------------------------------------------------ */}
-    {/* About These Recommendations (moved to bottom)                       */}
-    {/* ------------------------------------------------------------------ */}
     {book.introContent && book.introContent.length > 1 && (
       <section class="mb-24 md:mb-32 pt-16 border-t border-stone-200/40">
         <h2 class="font-serif text-2xl md:text-3xl font-bold text-[#1C1917] mb-8">Why These Books Are Similar to {book.title}</h2>
@@ -230,53 +169,179 @@ const authorImageUrl = book.author?.image
       </section>
     )}
 
-    {/* ------------------------------------------------------------------ */}
-    {/* Author Bio Section                                                  */}
-    {/* ------------------------------------------------------------------ */}
     {book.author && (
       <section class="border-t border-stone-200/40 pt-16 mb-24">
         <div class="max-w-3xl mx-auto">
           <div class="flex items-center gap-5 mb-6">
             {authorImageUrl ? (
-              <img
-                src={authorImageUrl}
-                alt={authorName}
-                class="w-24 h-24 lg:w-32 lg:h-32 rounded-full object-cover grayscale"
-                loading="lazy"
-              />
+              <img src={authorImageUrl} alt={authorName} class="w-32 h-32 rounded-full object-cover grayscale" loading="lazy" />
             ) : (
-              <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full bg-[#e5e2dc] flex items-center justify-center flex-shrink-0">
-                <span class="font-serif text-2xl text-[#404943]">
-                  {authorName.charAt(0)}
-                </span>
+              <div class="w-32 h-32 rounded-full bg-[#e5e2dc] flex items-center justify-center flex-shrink-0">
+                <span class="font-serif text-2xl text-[#404943]">{authorName.charAt(0)}</span>
               </div>
             )}
             <div>
-              <h3 class="text-2xl font-bold italic font-serif text-[#1C1917] mb-1">
-                {authorName}
-              </h3>
-              {book.author.bio && (
-                <p class="font-sans text-sm text-[#404943] leading-relaxed max-w-xl">
-                  {book.author.bio}
-                </p>
-              )}
+              <h3 class="text-2xl font-bold italic font-serif text-[#1C1917] mb-1">{authorName}</h3>
+              {book.author.bio && <p class="font-sans text-sm text-[#404943] leading-relaxed max-w-xl">{book.author.bio}</p>}
             </div>
           </div>
-
-          <a
-            href={`/author/${book.author.slug}`}
-            class="inline-block border border-[#0f5238] text-[#0f5238] font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3 rounded-sm hover:bg-[#0f5238] hover:text-white transition-all duration-200"
-          >
+          <a href={`/author/${book.author.slug}`} class="inline-block border border-[#0f5238] text-[#0f5238] font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3 rounded-sm hover:bg-[#0f5238] hover:text-white transition-all duration-200">
             Explore More Books
           </a>
         </div>
       </section>
     )}
 
-    {/* Breadcrumbs at bottom */}
     <Breadcrumbs items={breadcrumbItems} />
-
   </main>
+
+  {/* ================================================================== */}
+  {/* MOBILE LAYOUT                                                       */}
+  {/* ================================================================== */}
+  <main class="md:hidden pt-0 pb-24">
+    {/* Mobile Hero */}
+    <section class="px-6 py-12 bg-[#f5f3ef]">
+      <div class="flex flex-col items-center text-center">
+        {/* Cover */}
+        <div class="relative w-48 aspect-[2/3] mb-8 shadow-[0_8px_32px_-4px_rgba(28,25,23,0.06)] rounded-lg overflow-hidden bg-white p-4">
+          {heroImageUrl ? (
+            <img src={heroImageUrl} alt={`${book.title} by ${authorName} book cover`} class="w-full h-full object-cover rounded-sm" loading="eager" />
+          ) : (
+            <div class="w-full h-full bg-[#e5e2dc] rounded-sm flex items-center justify-center p-4">
+              <span class="font-serif text-sm text-[#404943] text-center">{book.title}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Author */}
+        <p class="font-sans text-[#0f5238] font-semibold tracking-widest text-xs uppercase mb-3">
+          BY {book.author ? (
+            <a href={`/author/${book.author.slug}`} class="no-underline hover:underline">{authorName.toUpperCase()}</a>
+          ) : authorName.toUpperCase()}
+        </p>
+
+        {/* H1 Title */}
+        <h1 class="font-serif text-3xl font-bold tracking-tight text-[#1C1917] leading-tight mb-6">
+          {recCount} Books Like {book.title}
+        </h1>
+
+        {/* Intro */}
+        <div class="max-w-md mx-auto space-y-4 text-[#404943] leading-relaxed text-sm font-serif">
+          {introQuote ? (
+            <p>{introQuote}</p>
+          ) : (
+            <p>Discover the best books like {book.title} by {authorName}. These carefully selected recommendations share similar themes, writing style, and appeal.</p>
+          )}
+        </div>
+      </div>
+    </section>
+
+    {/* Mobile Recommendations */}
+    {sortedRecommendations.length > 0 && (
+      <section class="px-6 space-y-16 py-16">
+        {sortedRecommendations.map((rec: any) => {
+          const recCoverUrl = rec.book?.coverImage ? urlFor(rec.book.coverImage).width(600).height(900).fit("crop").url() : null;
+          const recAuthorName = rec.book?.author?.name ?? "Unknown Author";
+          const recYear = rec.book?.publishedDate ? new Date(rec.book.publishedDate).getFullYear() : null;
+          const recGenres = rec.book?.genres ?? [];
+          const recIsPublished = rec.book?.status === "published";
+          const recBookUrl = `/discover/${rec.book?.slug}`;
+
+          const recSentences = rec.writeup?.match(/[^.!?]+[.!?]+/g) || [rec.writeup || ""];
+          const recMidpoint = Math.ceil(recSentences.length / 2);
+          const recParagraphs = recSentences.length <= 3
+            ? [rec.writeup || ""]
+            : [recSentences.slice(0, recMidpoint).join("").trim(), recSentences.slice(recMidpoint).join("").trim()].filter(Boolean);
+
+          return (
+            <article class="flex flex-col">
+              {/* Cover in container */}
+              <div class="bg-[#f5f3ef] rounded-xl p-6 mb-6">
+                {recCoverUrl ? (
+                  <img src={recCoverUrl} alt={`${rec.book?.title} book cover`} loading="lazy" class="w-full aspect-[3/4] object-cover rounded shadow-lg" />
+                ) : (
+                  <div class="w-full aspect-[3/4] bg-[#e5e2dc] rounded flex items-center justify-center p-6">
+                    <span class="font-serif text-lg text-[#404943] text-center">{rec.book?.title}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Meta tags */}
+              <div class="flex gap-2 mb-4 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+                {recYear && <span class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#404943] bg-[#efeeea] px-2 py-1 rounded whitespace-nowrap">{recYear}</span>}
+                {recGenres.map((genre: any) => (
+                  <a href={`/genre/${genre.slug}`} class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#404943] bg-[#efeeea] px-2 py-1 rounded whitespace-nowrap no-underline hover:bg-[#e5e2dc]">{genre.name}</a>
+                ))}
+              </div>
+
+              {/* Title */}
+              <h3 class="font-serif text-2xl font-bold mb-1 text-[#1C1917]">
+                {recIsPublished ? (
+                  <a href={recBookUrl} class="no-underline hover:text-[#0f5238] transition-colors">{rec.book?.title}</a>
+                ) : rec.book?.title}
+              </h3>
+
+              {/* Author */}
+              <p class="font-serif italic text-[#404943] mb-6">
+                by {rec.book?.author ? (
+                  <a href={`/author/${rec.book.author.slug}`} class="no-underline hover:underline">{recAuthorName}</a>
+                ) : recAuthorName}
+              </p>
+
+              {/* Why it's similar */}
+              <div class="mb-6">
+                <p class="font-sans text-[11px] font-bold text-[#0f5238] tracking-widest uppercase mb-2">WHY IT'S SIMILAR</p>
+                <div class="space-y-3 text-sm leading-relaxed text-[#1C1917] font-serif">
+                  {recParagraphs.map((para: string) => <p>{para}</p>)}
+                </div>
+              </div>
+
+              {/* Elements in common */}
+              {rec.commonElements && rec.commonElements.length > 0 && (
+                <div class="border-l-2 border-[#2D6A4F]/20 pl-4 py-1 mb-8">
+                  <p class="font-sans text-[11px] font-bold text-[#404943] tracking-widest uppercase mb-3">Elements in Common</p>
+                  <ul class="space-y-2 text-sm text-[#404943] italic font-serif">
+                    {rec.commonElements.map((el: string) => <li>&#8226; {el}</li>)}
+                  </ul>
+                </div>
+              )}
+
+              {/* Actions */}
+              <div class="space-y-3">
+                {recIsPublished && (
+                  <a href={recBookUrl} class="block text-center text-[#0f5238] font-sans text-xs uppercase tracking-widest font-bold py-3">
+                    Read Review
+                  </a>
+                )}
+                {rec.book?.amazonAffiliateLink && (
+                  <a href={rec.book.amazonAffiliateLink} target="_blank" rel="nofollow noopener sponsored" class="block w-full py-4 rounded-md border border-[#954912] text-[#954912] font-sans font-bold text-sm tracking-widest uppercase text-center hover:bg-[#954912] hover:text-white transition-all">
+                    AMAZON STORE
+                  </a>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </section>
+    )}
+
+    {/* Mobile About */}
+    {book.introContent && book.introContent.length > 1 && (
+      <section class="mx-6 p-8 bg-[#e4e2de] rounded-xl">
+        <h3 class="font-serif text-xl font-bold mb-4 text-[#1C1917]">Why These Books Are Similar to {book.title}</h3>
+        <div class="space-y-4 text-sm leading-relaxed text-[#404943] italic font-serif">
+          <PortableText value={book.introContent.slice(1)} />
+        </div>
+      </section>
+    )}
+
+    {/* Mobile breadcrumbs */}
+    <div class="px-6 mt-12">
+      <Breadcrumbs items={breadcrumbItems} />
+    </div>
+  </main>
+
+  {/* (Desktop and mobile layouts above contain all sections) */}
 
   {/* JSON-LD */}
   <script
