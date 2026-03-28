@@ -43,15 +43,24 @@ const year = book.publishedDate
 
 const genreNames = book.genres?.map((g: any) => g.name) ?? [];
 
-// Split writeup into paragraphs at sentence boundaries
+// Split writeup into 3-4 paragraphs at sentence boundaries
 function splitIntoParagraphs(text: string): string[] {
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-  if (sentences.length <= 3) return [text];
-
-  const midpoint = Math.ceil(sentences.length / 2);
+  if (sentences.length <= 2) return [text];
+  if (sentences.length <= 4) {
+    // 3-4 sentences: split into 2 paragraphs
+    const mid = Math.ceil(sentences.length / 2);
+    return [
+      sentences.slice(0, mid).join("").trim(),
+      sentences.slice(mid).join("").trim(),
+    ].filter(Boolean);
+  }
+  // 5+ sentences: split into 3 paragraphs
+  const third = Math.ceil(sentences.length / 3);
   return [
-    sentences.slice(0, midpoint).join("").trim(),
-    sentences.slice(midpoint).join("").trim(),
+    sentences.slice(0, third).join("").trim(),
+    sentences.slice(third, third * 2).join("").trim(),
+    sentences.slice(third * 2).join("").trim(),
   ].filter(Boolean);
 }
 
@@ -81,9 +90,9 @@ const bookUrl = `/discover/${book.slug}`;
   </div>
 
   {/* Content */}
-  <div class="flex-1 pt-0 md:pt-2 space-y-4">
+  <div class="flex-1 pt-0 md:pt-2">
     {/* Meta tags */}
-    <div class="flex items-center gap-2 flex-wrap font-sans text-[10px] font-bold uppercase tracking-[0.15em] text-stone-500">
+    <div class="flex items-center gap-2 flex-wrap font-sans text-[10px] font-bold uppercase tracking-[0.15em] text-stone-500 mb-3">
       {year && (
         <span class="bg-stone-200/50 px-2 py-1 rounded-sm">{year}</span>
       )}
@@ -93,7 +102,7 @@ const bookUrl = `/discover/${book.slug}`;
     </div>
 
     {/* Title */}
-    <h3 class="font-serif text-2xl md:text-3xl font-bold leading-tight text-[#1C1917] !mt-2">
+    <h3 class="font-serif text-2xl md:text-3xl font-bold leading-tight text-[#1C1917]">
       {isPublished ? (
         <a href={bookUrl} class="hover:text-[#0f5238] transition-colors no-underline">
           {book.title}
@@ -104,7 +113,7 @@ const bookUrl = `/discover/${book.slug}`;
     </h3>
 
     {/* Author */}
-    <p class="font-sans uppercase tracking-wider text-xs text-stone-500 !mt-1">
+    <p class="font-sans uppercase tracking-wider text-xs text-stone-500 mt-1">
       BY {book.author ? (
         <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName.toUpperCase()}</a>
       ) : (
@@ -113,12 +122,12 @@ const bookUrl = `/discover/${book.slug}`;
     </p>
 
     {/* Why It's Similar label */}
-    <div class="pt-2">
+    <div class="mt-5">
       <span class="font-sans text-[10px] font-bold uppercase tracking-widest text-[#2D6A4F]">Why It's Similar</span>
     </div>
 
     {/* Writeup */}
-    <div class="font-serif text-base md:text-lg text-[#404943] leading-relaxed space-y-4">
+    <div class="font-serif text-base md:text-lg text-[#404943] leading-relaxed space-y-4 mt-3">
       {paragraphs.map((para) => (
         <p>{para}</p>
       ))}
@@ -126,7 +135,7 @@ const bookUrl = `/discover/${book.slug}`;
 
     {/* Common Elements */}
     {commonElements && commonElements.length > 0 && (
-      <div class="p-5 bg-[#0f5238]/5 rounded-xl border-l-2 border-[#0f5238]/20 space-y-3">
+      <div class="p-5 bg-[#0f5238]/5 rounded-xl border-l-2 border-[#0f5238]/20 space-y-3 mt-6">
         <h4 class="font-sans text-[10px] font-bold uppercase tracking-widest text-[#0f5238]">
           Elements in Common{parentBookTitle ? ` with ${parentBookTitle}` : ""}
         </h4>
@@ -142,7 +151,7 @@ const bookUrl = `/discover/${book.slug}`;
     )}
 
     {/* Action buttons */}
-    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6 pt-2">
+    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6 mt-6">
       {isPublished && (
         <a
           href={bookUrl}
