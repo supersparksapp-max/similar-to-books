@@ -85,7 +85,7 @@ export async function getBookBySlug(slug: string) {
 // ---------------------------------------------------------------------------
 
 const allAuthorsQuery = defineQuery(`
-  *[_type == "author"] | order(name asc) {
+  *[_type == "author" && count(*[_type == "book" && status == "published" && author._ref == ^._id]) > 0] | order(name asc) {
     _id,
     name,
     "slug": slug.current,

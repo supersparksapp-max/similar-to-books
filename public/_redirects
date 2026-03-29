@@ -1,0 +1,5 @@
+# Redirect old /books-like-* URLs to /discover/books-like-*
+/books-like-* /discover/books-like-:splat 301
+
+# Redirect old /books page to /discover
+/books /discover 301
