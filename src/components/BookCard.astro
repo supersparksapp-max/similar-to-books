@@ -112,9 +112,9 @@ const bookUrl = `/discover/${book.slug}`;
       )}
     </h3>
 
-    {/* Author */}
+    {/* Author - only link if book is published (author will have a page) */}
     <p class="font-serif italic text-[#404943] mt-1">
-      by {book.author ? (
+      by {book.author && isPublished ? (
         <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName}</a>
       ) : (
         <span>{authorName}</span>
