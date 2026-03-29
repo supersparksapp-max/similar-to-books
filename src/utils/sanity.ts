@@ -47,6 +47,7 @@ const bookBySlugQuery = defineQuery(`
     seoTitle,
     seoDescription,
     introContent,
+    closingContent,
     author->{ _id, name, "slug": slug.current },
     genres[]->{ _id, name, "slug": slug.current },
     tags[]->{ _id, name, "slug": slug.current },
