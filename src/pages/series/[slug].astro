@@ -81,15 +81,23 @@ const breadcrumbItems = [
               </div>
             )}
             <h3 class="font-serif text-lg font-bold mb-1 leading-snug">
-              <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors">
-                {book.title}
-              </a>
+              {book.status === "published" ? (
+                <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors">
+                  {book.title}
+                </a>
+              ) : (
+                <span>{book.title}</span>
+              )}
             </h3>
             {book.author && (
               <p class="text-sm text-on-surface-variant italic mb-3">
-                <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors">
-                  {book.author.name}
-                </a>
+                {book.status === "published" ? (
+                  <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors">
+                    {book.author.name}
+                  </a>
+                ) : (
+                  <span>{book.author.name}</span>
+                )}
               </p>
             )}
             {book.status === "published" && (

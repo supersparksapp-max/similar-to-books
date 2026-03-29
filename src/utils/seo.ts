@@ -54,7 +54,7 @@ export function generateBookSchema(book: BookForSchema) {
     "@type": "Book",
     name: book.title,
     description: book.description ?? "",
-    url: `https://www.similartobooks.com/${book.slug}`,
+    url: `https://www.similartobooks.com/discover/${book.slug}`,
   };
 
   if (book.isbn) {
@@ -92,8 +92,8 @@ export function generateBookSchema(book: BookForSchema) {
     schema.genre = book.genres.map((g) => g.name);
   }
 
-  // Freshness signal
-  schema.dateModified = `${currentYear}-01-01`;
+  // Use current date as dateModified
+  schema.dateModified = new Date().toISOString().split("T")[0];
 
   return schema;
 }

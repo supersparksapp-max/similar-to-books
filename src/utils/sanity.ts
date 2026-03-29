@@ -131,7 +131,7 @@ export async function getAuthorBySlug(slug: string) {
 // ---------------------------------------------------------------------------
 
 const allGenresQuery = defineQuery(`
-  *[_type == "genre"] | order(name asc) {
+  *[_type == "genre" && count(*[_type == "book" && status == "published" && references(^._id)]) > 0] | order(name asc) {
     _id,
     name,
     "slug": slug.current,
@@ -175,7 +175,7 @@ export async function getGenreBySlug(slug: string) {
 // ---------------------------------------------------------------------------
 
 const allSeriesQuery = defineQuery(`
-  *[_type == "series"] | order(name asc) {
+  *[_type == "series" && count(*[_type == "book" && status == "published" && series._ref == ^._id]) > 0] | order(name asc) {
     _id,
     name,
     "slug": slug.current,
@@ -221,7 +221,7 @@ export async function getSeriesBySlug(slug: string) {
 // ---------------------------------------------------------------------------
 
 const allTagsQuery = defineQuery(`
-  *[_type == "tag"] | order(name asc) {
+  *[_type == "tag" && count(*[_type == "book" && status == "published" && references(^._id)]) > 0] | order(name asc) {
     _id,
     name,
     "slug": slug.current,
