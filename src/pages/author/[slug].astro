@@ -79,13 +79,13 @@ const publishedBooks = author.books
     )}
 
     <!-- Books Grid -->
-    {author.books && author.books.length > 0 && (
+    {publishedBooks.length > 0 ? (
       <section>
         <h2 class="font-serif text-2xl tracking-tight mb-8">
           Books by {author.name}
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-          {author.books.map((book: any) => (
+          {publishedBooks.map((book: any) => (
             <div class="bg-[#F2EFE9] rounded-2xl p-8 flex flex-col items-center text-center group hover:shadow-card transition-shadow">
               {book.coverImage ? (
                 <a href={`/discover/${book.slug}`} class="mb-6 block">
@@ -99,29 +99,35 @@ const publishedBooks = author.books
                   />
                 </a>
               ) : (
-                <div class="w-[180px] h-[270px] bg-surface-container rounded-lg flex items-center justify-center mb-6 text-sm text-on-surface-variant">
-                  <span>{book.title}</span>
+                <div class="w-[180px] h-[270px] bg-[#efeeea] rounded-lg flex items-center justify-center mb-6 text-sm text-[#404943]">
+                  <span class="font-serif text-center px-4">{book.title}</span>
                 </div>
               )}
               <h3 class="font-serif text-lg font-bold mb-1 leading-snug">
-                <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors">
+                <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
                   {book.title}
                 </a>
               </h3>
-              <p class="text-sm text-on-surface-variant italic mb-3">
+              <p class="text-sm text-[#404943] italic mb-3">
                 {author.name}
               </p>
-              {book.status === "published" && (
-                <a
-                  href={`/discover/${book.slug}`}
-                  class="text-sm text-[#0f5238] font-medium hover:underline"
-                >
-                  If you loved this, try &rarr;
-                </a>
-              )}
+              <a
+                href={`/discover/${book.slug}`}
+                class="text-sm text-[#0f5238] font-medium hover:underline no-underline"
+              >
+                If you loved this, try &rarr;
+              </a>
             </div>
           ))}
         </div>
+      </section>
+    ) : (
+      <section class="text-center py-16 max-w-lg mx-auto">
+        <span class="material-symbols-outlined text-stone-300 text-5xl mb-4 block">auto_stories</span>
+        <h2 class="font-serif text-2xl font-bold text-[#1C1917] mb-3">Coming Soon</h2>
+        <p class="font-serif text-base text-[#404943] leading-relaxed">
+          We're currently curating book recommendations for {author.name}. Check back soon for a full list of similar reads.
+        </p>
       </section>
     )}
   </div>
