@@ -20,6 +20,28 @@ const seoTitle = "Similar To Books - Find Your Next Great Read";
 const seoDescription =
   "Discover books similar to your favorites. Browse curated recommendations by genre, author, and theme to find your next great read.";
 const canonicalUrl = "https://www.similartobooks.com/";
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Similar To Books",
+  url: "https://www.similartobooks.com",
+  description: seoDescription,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://www.similartobooks.com/discover/?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Similar To Books",
+  url: "https://www.similartobooks.com",
+  logo: "https://www.similartobooks.com/logo.png",
+  sameAs: [],
+};
 ---
 
 <BaseLayout title={seoTitle} description={seoDescription}>
@@ -189,4 +211,7 @@ const canonicalUrl = "https://www.similartobooks.com/";
       </div>
     </section>
   )}
+
+  <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
 </BaseLayout>

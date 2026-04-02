@@ -128,6 +128,8 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
     canonicalUrl={canonicalUrl}
     ogImage={ogImage}
     ogType="article"
+    publishedDate={book._createdAt?.split("T")[0]}
+    modifiedDate={book._updatedAt?.split("T")[0]}
   />
 
   {/* ================================================================== */}

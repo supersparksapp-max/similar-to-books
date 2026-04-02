@@ -34,6 +34,8 @@ export async function getPublishedBooks() {
 const bookBySlugQuery = defineQuery(`
   *[_type == "book" && slug.current == $slug][0] {
     _id,
+    _createdAt,
+    _updatedAt,
     title,
     "slug": slug.current,
     coverImage,
