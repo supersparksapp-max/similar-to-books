@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SEOHead from "../components/SEOHead.astro";
+
+const title = "About — Similar To Books";
+const description = "We're a group of book lovers who built Similar To Books to help readers find their next favorite book. Learn why we started and how our recommendations work.";
+const canonicalUrl = "https://www.similartobooks.com/about";
+---
+
+<BaseLayout title={title} description={description}>
+  <SEOHead
+    slot="head"
+    title={title}
+    description={description}
+    canonicalUrl={canonicalUrl}
+    ogType="website"
+  />
+
+  <main class="max-w-3xl mx-auto px-6 py-16 md:py-24">
+    <h1 class="font-serif text-3xl md:text-4xl font-bold text-[#1C1917] mb-12">About Similar To Books</h1>
+
+    <div class="space-y-8">
+      <p class="font-serif text-lg text-[#404943] leading-relaxed">
+        Finding your next favorite book is harder than it should be.
+      </p>
+
+      <p class="font-serif text-base text-[#404943] leading-relaxed">
+        You finish something you loved and want more of that exact feeling: the atmosphere, the pacing, the kind of characters you actually root for. So you search for "books similar to" whatever just wrecked you, and what comes back? Amazon recommends bestsellers that share nothing but the genre. Goodreads surfaces the same ten titles everyone has already read. You try Reddit, but it is one person's opinion buried in a thread from three years ago. None of these options actually understand what made that book work for you.
+      </p>
+
+      <p class="font-serif text-base text-[#404943] leading-relaxed">
+        We built Similar To Books because we kept running into this problem ourselves. We are a group of book lovers who got tired of scrolling through generic recommendation lists at midnight, looking for something that captures the same magic as <a href="/discover/books-like-the-secret-history" class="text-[#0f5238] underline hover:text-[#2D6A4F] transition-colors">The Secret History</a> or the same gut-punch as <a href="/discover/books-like-a-little-life" class="text-[#0f5238] underline hover:text-[#2D6A4F] transition-colors">A Little Life</a>. We wanted a place where every recommendation actually earns its spot.
+      </p>
+
+      <p class="font-serif text-base text-[#404943] leading-relaxed">
+        Every book on this site goes through a real research process. We read reviews, dig through reader discussions, compare themes and writing styles, and ask the question that matters: if someone loved this specific book, will they love this recommendation? We don't pad lists with popular titles to fill space. If a book shows up on our page for <a href="/discover/books-like-1984" class="text-[#0f5238] underline hover:text-[#2D6A4F] transition-colors">books like 1984</a>, it is there because it shares something meaningful with Orwell's world, not because it happens to be dystopian fiction.
+      </p>
+
+      <p class="font-serif text-base text-[#404943] leading-relaxed">
+        Each recommendation comes with a detailed writeup explaining exactly why the two books connect and what readers can expect. We break down the common elements, from narrative structure to emotional tone, so you can decide for yourself whether it is the right fit. No star ratings, no vague "readers also enjoyed" labels. Just honest, specific reasoning from people who care about getting it right.
+      </p>
+
+      <p class="font-serif text-base text-[#404943] leading-relaxed">
+        We also built a <a href="https://chromewebstore.google.com/detail/better-book-recommendatio/lljpigggcfjlmccgbfkkogbegaefhdal" target="_blank" rel="noopener" class="text-[#0f5238] underline hover:text-[#2D6A4F] transition-colors">free Chrome extension</a> that brings our recommendations directly to Amazon. When you are browsing a book on Amazon, the extension shows you our curated picks right on the page, so you never have to leave to find your next read.
+      </p>
+
+      <p class="font-serif text-base text-[#404943] leading-relaxed">
+        Whether you are looking for <a href="/discover/books-like-project-hail-mary" class="text-[#0f5238] underline hover:text-[#2D6A4F] transition-colors">books like Project Hail Mary</a> or something completely outside your usual genre, we hope this site helps you find exactly what you are looking for. Happy reading.
+      </p>
+    </div>
+  </main>
+</BaseLayout>
