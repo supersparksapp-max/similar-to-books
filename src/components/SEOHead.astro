@@ -24,16 +24,19 @@ const siteUrl = "https://www.similartobooks.com";
 const defaultOgImage = `${siteUrl}/og-default.png`;
 const resolvedOgImage = ogImage || defaultOgImage;
 
+// Ensure canonical URL always has trailing slash
+const resolvedCanonicalUrl = canonicalUrl.endsWith('/') ? canonicalUrl : `${canonicalUrl}/`;
+
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={canonicalUrl} />
+<link rel="canonical" href={resolvedCanonicalUrl} />
 
 <!-- Open Graph -->
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:url" content={canonicalUrl} />
+<meta property="og:url" content={resolvedCanonicalUrl} />
 <meta property="og:type" content={ogType} />
 <meta property="og:site_name" content={siteName} />
 <meta property="og:image" content={resolvedOgImage} />

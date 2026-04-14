@@ -10,6 +10,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://www.similartobooks.com',
   output: 'static',
+  trailingSlash: 'always',
   adapter: cloudflare(),
 
   integrations: [
