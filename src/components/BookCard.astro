@@ -67,7 +67,7 @@ function splitIntoParagraphs(text: string): string[] {
 const paragraphs = splitIntoParagraphs(writeup);
 
 const isPublished = book.status === "published";
-const bookUrl = `/discover/${book.slug}`;
+const bookUrl = `/discover/${book.slug}/`;
 ---
 
 <article class="flex flex-col md:flex-row gap-8 md:gap-10 items-start pb-8 md:pb-16" id={`recommendation-${rank}`}>
@@ -97,7 +97,7 @@ const bookUrl = `/discover/${book.slug}`;
         <span class="bg-stone-200/50 px-2 py-1 rounded-sm">{year}</span>
       )}
       {book.genres && book.genres.length > 0 && book.genres.map((genre: any) => (
-        <a href={`/genre/${genre.slug}`} class="bg-stone-200/50 px-2 py-1 rounded-sm hover:bg-stone-300/50 transition-colors no-underline text-stone-500 hover:text-[#0f5238]">{genre.name}</a>
+        <a href={`/genre/${genre.slug}/`} class="bg-stone-200/50 px-2 py-1 rounded-sm hover:bg-stone-300/50 transition-colors no-underline text-stone-500 hover:text-[#0f5238]">{genre.name}</a>
       ))}
     </div>
 
@@ -114,8 +114,8 @@ const bookUrl = `/discover/${book.slug}`;
 
     {/* Author - only link if book is published (author will have a page) */}
     <p class="font-serif italic text-[#404943] mt-1">
-      by {book.author && isPublished ? (
-        <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName}</a>
+      by {book.author?.slug && isPublished ? (
+        <a href={`/author/${book.author.slug}/`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName}</a>
       ) : (
         <span>{authorName}</span>
       )}

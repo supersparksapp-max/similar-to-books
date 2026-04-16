@@ -40,7 +40,7 @@ const seoTitle =
 const seoDescription =
   book.seoDescription ??
   `Looking for books like ${book.title} by ${authorName}? Here are ${recCount} books similar to ${book.title} that share the same themes, style, and appeal.`;
-const canonicalUrl = `https://www.similartobooks.com/discover/${book.slug}`;
+const canonicalUrl = `https://www.similartobooks.com/discover/${book.slug}/`;
 const ogImage = book.coverImage
   ? urlFor(book.coverImage).width(1200).height(630).fit("crop").url()
   : undefined;
@@ -48,9 +48,9 @@ const ogImage = book.coverImage
 const breadcrumbItems = [
   { label: "Home", href: "/" },
   ...(primaryGenre
-    ? [{ label: primaryGenre.name, href: `/genre/${primaryGenre.slug}` }]
+    ? [{ label: primaryGenre.name, href: `/genre/${primaryGenre.slug}/` }]
     : []),
-  { label: `Books Like ${book.title}`, href: `/discover/${book.slug}` },
+  { label: `Books Like ${book.title}`, href: `/discover/${book.slug}/` },
 ];
 
 const sortedRecommendations = (book.recommendations ?? []).sort(
@@ -115,7 +115,7 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
   recYear: rec.book?.publishedDate ? new Date(rec.book.publishedDate).getFullYear() : null,
   recGenres: rec.book?.genres ?? [],
   recIsPublished: rec.book?.status === "published",
-  recBookUrl: `/discover/${rec.book?.slug}`,
+  recBookUrl: `/discover/${rec.book?.slug}/`,
   recParagraphs: splitWriteup(rec.writeup),
 }));
 ---
@@ -152,16 +152,16 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
             <div class="font-sans text-[11px] uppercase tracking-[0.2em] text-[#0f5238] font-bold mb-2 flex flex-wrap items-center gap-1">
               {year && <span>{year}</span>}
               {year && primaryGenre && <span class="mx-1">&bull;</span>}
-              {primaryGenre && <a href={`/genre/${primaryGenre.slug}`} class="hover:underline no-underline">{primaryGenre.name}</a>}
+              {primaryGenre && <a href={`/genre/${primaryGenre.slug}/`} class="hover:underline no-underline">{primaryGenre.name}</a>}
               {book.genres && book.genres.length > 1 && book.genres.slice(1).map((genre: any) => (
-                <Fragment><span class="mx-1">&bull;</span><a href={`/genre/${genre.slug}`} class="hover:underline no-underline">{genre.name}</a></Fragment>
+                <Fragment><span class="mx-1">&bull;</span><a href={`/genre/${genre.slug}/`} class="hover:underline no-underline">{genre.name}</a></Fragment>
               ))}
             </div>
           )}
           <h2 class="font-serif text-5xl font-bold tracking-tight text-[#1C1917] leading-tight mb-2">{book.title}</h2>
           <p class="font-sans text-[11px] uppercase tracking-[0.2em] text-stone-500 font-semibold">
-            BY {book.author ? (
-              <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName.toUpperCase()}</a>
+            BY {book.author?.slug ? (
+              <a href={`/author/${book.author.slug}/`} class="hover:text-[#0f5238] transition-colors no-underline hover:underline">{authorName.toUpperCase()}</a>
             ) : authorName.toUpperCase()}
           </p>
         </div>
@@ -208,7 +208,7 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
       </section>
     ) : null}
 
-    {book.author && (
+    {book.author?.slug && (
       <section class="border-t border-stone-200/40 pt-16 mb-24">
         <div class="max-w-3xl mx-auto">
           <div class="flex items-center gap-5 mb-6">
@@ -224,7 +224,7 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
               {book.author.bio && <p class="font-sans text-sm text-[#404943] leading-relaxed max-w-xl">{book.author.bio}</p>}
             </div>
           </div>
-          <a href={`/author/${book.author.slug}`} class="inline-block border border-[#0f5238] text-[#0f5238] font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3 rounded-sm hover:bg-[#0f5238] hover:text-white transition-all duration-200">
+          <a href={`/author/${book.author.slug}/`} class="inline-block border border-[#0f5238] text-[#0f5238] font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-3 rounded-sm hover:bg-[#0f5238] hover:text-white transition-all duration-200">
             Explore More Books
           </a>
         </div>
@@ -254,8 +254,8 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
 
         {/* Author */}
         <p class="font-sans text-[#0f5238] font-semibold tracking-widest text-xs uppercase mb-3">
-          BY {book.author ? (
-            <a href={`/author/${book.author.slug}`} class="no-underline hover:underline">{authorName.toUpperCase()}</a>
+          BY {book.author?.slug ? (
+            <a href={`/author/${book.author.slug}/`} class="no-underline hover:underline">{authorName.toUpperCase()}</a>
           ) : authorName.toUpperCase()}
         </p>
 
@@ -295,7 +295,7 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
               <div class="flex gap-2 mb-4 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
                 {rec.recYear && <span class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#404943] bg-[#efeeea] px-2 py-1 rounded whitespace-nowrap">{rec.recYear}</span>}
                 {rec.recGenres.map((genre: any) => (
-                  <a href={`/genre/${genre.slug}`} class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#404943] bg-[#efeeea] px-2 py-1 rounded whitespace-nowrap no-underline hover:bg-[#e5e2dc]">{genre.name}</a>
+                  <a href={`/genre/${genre.slug}/`} class="font-sans text-[10px] tracking-[0.2em] uppercase text-[#404943] bg-[#efeeea] px-2 py-1 rounded whitespace-nowrap no-underline hover:bg-[#e5e2dc]">{genre.name}</a>
                 ))}
               </div>
 
@@ -308,8 +308,8 @@ const mobileRecs = sortedRecommendations.map((rec: any) => ({
 
               {/* Author */}
               <p class="font-serif italic text-[#404943] mb-6">
-                by {rec.book?.author ? (
-                  <a href={`/author/${rec.book.author.slug}`} class="no-underline hover:underline">{rec.recAuthorName}</a>
+                by {rec.book?.author?.slug ? (
+                  <a href={`/author/${rec.book.author.slug}/`} class="no-underline hover:underline">{rec.recAuthorName}</a>
                 ) : rec.recAuthorName}
               </p>
 

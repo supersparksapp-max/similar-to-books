@@ -8,7 +8,7 @@
       <img src="/logo-icon.png" alt="Similar To Books" style="height: 32px; width: auto;" class="logo-mobile" />
     </a>
     <nav class="hidden md:flex items-center gap-12 absolute left-1/2 -translate-x-1/2">
-      <a href="/discover" class="font-sans tracking-widest uppercase text-xs text-[#1C1917]/70 hover:text-[#2D6A4F] transition-colors">All Books</a>
+      <a href="/discover/" class="font-sans tracking-widest uppercase text-xs text-[#1C1917]/70 hover:text-[#2D6A4F] transition-colors">All Books</a>
       <a href="/#genres" class="font-sans tracking-widest uppercase text-xs text-[#1C1917]/70 hover:text-[#2D6A4F] transition-colors">Browse Genres</a>
     </nav>
     <div class="flex items-center gap-4">
@@ -180,7 +180,7 @@
     resultsList.innerHTML = matches
       .map(
         (b: any, i: number) => `
-        <a href="/discover/${b.s}" class="flex items-center gap-4 p-3 rounded-lg hover:bg-[#F2EFE9] transition-colors duration-150 cursor-pointer group no-underline search-result-item" style="animation: searchFadeIn 0.2s ease forwards; animation-delay: ${i * 0.04}s; opacity: 0;">
+        <a href="/discover/${b.s}/" class="flex items-center gap-4 p-3 rounded-lg hover:bg-[#F2EFE9] transition-colors duration-150 cursor-pointer group no-underline search-result-item" style="animation: searchFadeIn 0.2s ease forwards; animation-delay: ${i * 0.04}s; opacity: 0;">
           <div class="w-12 h-[4.5rem] flex-shrink-0 rounded-sm overflow-hidden bg-[#efeeea] shadow-sm">
             ${
               b.c

@@ -29,7 +29,10 @@ const websiteSchema = {
   description: seoDescription,
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://www.similartobooks.com/discover/?q={search_term_string}",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://www.similartobooks.com/discover/?q={search_term_string}",
+    },
     "query-input": "required name=search_term_string",
   },
 };
@@ -81,7 +84,7 @@ const organizationSchema = {
     <!-- Book Fan Arrangement -->
     {fanBooks.length >= 5 && (
       <div class="relative w-full max-w-6xl mx-auto h-[400px] mt-12 hidden md:flex justify-center items-end" style="perspective: 1000px;">
-        <a href={`/discover/${fanBooks[0].slug}`} class="absolute transform -translate-x-64 translate-y-8 -rotate-[25deg] z-10">
+        <a href={`/discover/${fanBooks[0].slug}/`} class="absolute transform -translate-x-64 translate-y-8 -rotate-[25deg] z-10">
           <img
             src={urlFor(fanBooks[0].coverImage).width(384).height(576).fit("crop").url()}
             alt={`${fanBooks[0].title} by ${fanBooks[0].author?.name ?? ""} book cover`}
@@ -89,7 +92,7 @@ const organizationSchema = {
             loading="eager"
           />
         </a>
-        <a href={`/discover/${fanBooks[1].slug}`} class="absolute transform -translate-x-32 translate-y-2 -rotate-[12deg] z-20">
+        <a href={`/discover/${fanBooks[1].slug}/`} class="absolute transform -translate-x-32 translate-y-2 -rotate-[12deg] z-20">
           <img
             src={urlFor(fanBooks[1].coverImage).width(384).height(576).fit("crop").url()}
             alt={`${fanBooks[1].title} by ${fanBooks[1].author?.name ?? ""} book cover`}
@@ -97,7 +100,7 @@ const organizationSchema = {
             loading="eager"
           />
         </a>
-        <a href={`/discover/${fanBooks[2].slug}`} class="absolute transform translate-y-0 rotate-0 z-30">
+        <a href={`/discover/${fanBooks[2].slug}/`} class="absolute transform translate-y-0 rotate-0 z-30">
           <img
             src={urlFor(fanBooks[2].coverImage).width(416).height(640).fit("crop").url()}
             alt={`${fanBooks[2].title} by ${fanBooks[2].author?.name ?? ""} book cover`}
@@ -105,7 +108,7 @@ const organizationSchema = {
             loading="eager"
           />
         </a>
-        <a href={`/discover/${fanBooks[3].slug}`} class="absolute transform translate-x-32 translate-y-2 rotate-[12deg] z-20">
+        <a href={`/discover/${fanBooks[3].slug}/`} class="absolute transform translate-x-32 translate-y-2 rotate-[12deg] z-20">
           <img
             src={urlFor(fanBooks[3].coverImage).width(384).height(576).fit("crop").url()}
             alt={`${fanBooks[3].title} by ${fanBooks[3].author?.name ?? ""} book cover`}
@@ -113,7 +116,7 @@ const organizationSchema = {
             loading="eager"
           />
         </a>
-        <a href={`/discover/${fanBooks[4].slug}`} class="absolute transform translate-x-64 translate-y-8 rotate-[25deg] z-10">
+        <a href={`/discover/${fanBooks[4].slug}/`} class="absolute transform translate-x-64 translate-y-8 rotate-[25deg] z-10">
           <img
             src={urlFor(fanBooks[4].coverImage).width(384).height(576).fit("crop").url()}
             alt={`${fanBooks[4].title} by ${fanBooks[4].author?.name ?? ""} book cover`}
@@ -128,7 +131,7 @@ const organizationSchema = {
     {fanBooks.length >= 3 && (
       <div class="flex md:hidden gap-4 overflow-x-auto px-6 mt-8 pb-4 snap-x snap-mandatory">
         {fanBooks.map((book: any) => (
-          <a href={`/discover/${book.slug}`} class="flex-shrink-0 snap-center">
+          <a href={`/discover/${book.slug}/`} class="flex-shrink-0 snap-center">
             <img
               src={urlFor(book.coverImage).width(256).height(384).fit("crop").url()}
               alt={`${book.title} book cover`}
@@ -161,7 +164,7 @@ const organizationSchema = {
         {books && books.length > 12 && (
           <div class="flex justify-center mt-20">
             <a
-              href="/discover"
+              href="/discover/"
               class="bg-transparent border-2 border-[#0f5238] text-[#0f5238] font-sans font-bold py-3 px-12 rounded-md hover:bg-[#0f5238]/5 transition-colors text-sm tracking-widest uppercase"
             >
               See All {books.length} Recommendations
@@ -182,7 +185,7 @@ const organizationSchema = {
         <div class="flex flex-wrap justify-center gap-3">
           {genres.map((genre: any) => (
             <a
-              href={`/genre/${genre.slug}`}
+              href={`/genre/${genre.slug}/`}
               class="px-6 py-2.5 rounded-full bg-white border border-[#bfc9c1]/30 text-[#1C1917] font-sans text-sm hover:border-[#0f5238] hover:text-[#0f5238] transition-all"
             >
               {genre.name}
@@ -202,7 +205,7 @@ const organizationSchema = {
       <div class="flex flex-wrap justify-center gap-2">
         {tags.map((tag: any) => (
           <a
-            href={`/tag/${tag.slug}`}
+            href={`/tag/${tag.slug}/`}
             class="px-4 py-2 rounded-lg bg-[#FAF8F4] border border-[#2D6A4F]/10 text-[#1C1917] font-sans text-xs hover:border-[#0f5238] transition-all"
           >
             {tag.name}

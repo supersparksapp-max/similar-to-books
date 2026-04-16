@@ -26,11 +26,11 @@ const seoTitle = tag.seoTitle ?? `${tag.name} Books`;
 const seoDescription =
   tag.seoDescription ??
   `Browse books tagged with "${tag.name}" and find curated recommendations for each title.`;
-const canonicalUrl = `https://www.similartobooks.com/tag/${tag.slug}`;
+const canonicalUrl = `https://www.similartobooks.com/tag/${tag.slug}/`;
 
 const breadcrumbItems = [
   { label: "Home", href: "/" },
-  { label: tag.name, href: `/tag/${tag.slug}` },
+  { label: tag.name, href: `/tag/${tag.slug}/` },
 ];
 ---
 
@@ -60,7 +60,7 @@ const breadcrumbItems = [
         {tag.books.map((book: any) => (
           <div class="bg-[#F2EFE9] rounded-2xl p-8 flex flex-col items-center text-center group hover:shadow-card transition-shadow">
             {book.coverImage ? (
-              <a href={`/discover/${book.slug}`} class="mb-6 block">
+              <a href={`/discover/${book.slug}/`} class="mb-6 block">
                 <img
                   src={urlFor(book.coverImage).width(300).height(450).fit("crop").url()}
                   alt={`${book.title} by ${book.author?.name ?? "Unknown Author"} book cover`}
@@ -76,19 +76,23 @@ const breadcrumbItems = [
               </div>
             )}
             <h3 class="font-serif text-lg font-bold mb-1 leading-snug">
-              <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors">
+              <a href={`/discover/${book.slug}/`} class="hover:text-[#2d6a4f] transition-colors">
                 {book.title}
               </a>
             </h3>
             {book.author && (
               <p class="text-sm text-on-surface-variant italic mb-3">
-                <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors">
-                  {book.author.name}
-                </a>
+                {book.author.slug ? (
+                  <a href={`/author/${book.author.slug}/`} class="hover:text-[#0f5238] transition-colors">
+                    {book.author.name}
+                  </a>
+                ) : (
+                  <span>{book.author.name}</span>
+                )}
               </p>
             )}
             <a
-              href={`/discover/${book.slug}`}
+              href={`/discover/${book.slug}/`}
               class="text-sm text-[#0f5238] font-medium hover:underline"
             >
               If you loved this, try &rarr;

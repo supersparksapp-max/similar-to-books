@@ -19,7 +19,7 @@ const coverUrl = book.coverImage
 ---
 
 <div class="group">
-  <a href={`/discover/${book.slug}`} class="block">
+  <a href={`/discover/${book.slug}/`} class="block">
     <div class="bg-[#F2EFE9] p-8 aspect-[2/3] mb-6 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-2">
       {coverUrl ? (
         <img
@@ -39,13 +39,17 @@ const coverUrl = book.coverImage
     </span>
   )}
   <h4 class="font-serif text-xl text-[#1C1917] mb-1">
-    <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
+    <a href={`/discover/${book.slug}/`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
   </h4>
   {book.author && (
     <p class="font-sans text-xs text-[#404943] tracking-wider font-light">
-      <a href={`/author/${book.author.slug}`} class="hover:text-[#0f5238] transition-colors no-underline">
-        {book.author.name}
-      </a>
+      {book.author.slug ? (
+        <a href={`/author/${book.author.slug}/`} class="hover:text-[#0f5238] transition-colors no-underline">
+          {book.author.name}
+        </a>
+      ) : (
+        <span>{book.author.name}</span>
+      )}
     </p>
   )}
 </div>

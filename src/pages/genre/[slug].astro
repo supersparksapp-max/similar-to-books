@@ -28,11 +28,11 @@ const seoTitle =
 const seoDescription =
   genre.seoDescription ??
   `Discover the best ${genre.name} books and find similar reads. Browse our curated ${genre.name} recommendations.`;
-const canonicalUrl = `https://www.similartobooks.com/genre/${genre.slug}`;
+const canonicalUrl = `https://www.similartobooks.com/genre/${genre.slug}/`;
 
 const breadcrumbItems = [
   { label: "Home", href: "/" },
-  { label: genre.name, href: `/genre/${genre.slug}` },
+  { label: genre.name, href: `/genre/${genre.slug}/` },
 ];
 ---
 

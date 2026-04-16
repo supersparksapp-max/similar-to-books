@@ -1,12 +1,13 @@
-# Redirect old /books-like-* URLs to /discover/books-like-*
-/books-like-* /discover/books-like-:splat 301
+# Redirect old /books-like-* URLs (no /discover prefix) to /discover/books-like-*/
+/books-like-* /discover/books-like-:splat/ 301
 
-# Redirect old /books page to /discover
+# Redirect old /books page to /discover/
 /books /discover/ 301
+/books/ /discover/ 301
 
-# Redirect bare book slugs to /discover/books-like-{slug}
+# Redirect bare book slugs (from old URL structure) to /discover/books-like-{slug}/
 /genuine-fraud /discover/books-like-genuine-fraud/ 301
-/a-good-girls-guide-to-murder /discover/a-good-girls-guide-to-murder/ 301
+/a-good-girls-guide-to-murder /discover/books-like-a-good-girls-guide-to-murder/ 301
 /one-of-us-is-lying /discover/books-like-one-of-us-is-lying/ 301
 /the-five-people-you-meet-in-heaven /discover/books-like-the-five-people-you-meet-in-heaven/ 301
 /the-girl-with-the-louding-voice /discover/books-like-the-girl-with-the-louding-voice/ 301

@@ -27,14 +27,14 @@ const seoTitle =
 const seoDescription =
   author.seoDescription ??
   `Discover books by ${author.name} and find similar recommendations for every title.`;
-const canonicalUrl = `https://www.similartobooks.com/author/${author.slug}`;
+const canonicalUrl = `https://www.similartobooks.com/author/${author.slug}/`;
 const ogImage = author.image
   ? urlFor(author.image).width(1200).height(630).fit("crop").url()
   : undefined;
 
 const breadcrumbItems = [
   { label: "Home", href: "/" },
-  { label: author.name, href: `/author/${author.slug}` },
+  { label: author.name, href: `/author/${author.slug}/` },
 ];
 
 const publishedBooks = author.books
@@ -88,7 +88,7 @@ const publishedBooks = author.books
           {publishedBooks.map((book: any) => (
             <div class="bg-[#F2EFE9] rounded-2xl p-8 flex flex-col items-center text-center group hover:shadow-card transition-shadow">
               {book.coverImage ? (
-                <a href={`/discover/${book.slug}`} class="mb-6 block">
+                <a href={`/discover/${book.slug}/`} class="mb-6 block">
                   <img
                     src={urlFor(book.coverImage).width(300).height(450).fit("crop").url()}
                     alt={`${book.title} by ${author.name} book cover`}
@@ -104,7 +104,7 @@ const publishedBooks = author.books
                 </div>
               )}
               <h3 class="font-serif text-lg font-bold mb-1 leading-snug">
-                <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">
+                <a href={`/discover/${book.slug}/`} class="hover:text-[#2d6a4f] transition-colors no-underline">
                   {book.title}
                 </a>
               </h3>
@@ -112,7 +112,7 @@ const publishedBooks = author.books
                 {author.name}
               </p>
               <a
-                href={`/discover/${book.slug}`}
+                href={`/discover/${book.slug}/`}
                 class="text-sm text-[#0f5238] font-medium hover:underline no-underline"
               >
                 If you loved this, try &rarr;

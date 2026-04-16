@@ -35,7 +35,7 @@ const seoDescription = `Browse ${books.length} curated book recommendation lists
     slot="head"
     title={seoTitle}
     description={seoDescription}
-    canonicalUrl="https://www.similartobooks.com/discover"
+    canonicalUrl="https://www.similartobooks.com/discover/"
     ogType="website"
   />
 
@@ -176,7 +176,7 @@ const seoDescription = `Browse ${books.length} curated book recommendation lists
                 data-genres={genreSlugs}
                 data-tags={tagSlugs}
               >
-                <a href={`/discover/${book.slug}`} class="block no-underline">
+                <a href={`/discover/${book.slug}/`} class="block no-underline">
                   <div class="bg-[#F2EFE9] p-6 md:p-8 aspect-[2/3] mb-4 md:mb-6 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-2">
                     {coverUrl ? (
                       <img src={coverUrl} alt={`${book.title} book cover`} loading="lazy" class="w-full h-full object-cover" style="box-shadow: 8px 16px 32px rgba(28,25,23,0.12);" />
@@ -189,12 +189,12 @@ const seoDescription = `Browse ${books.length} curated book recommendation lists
                   <span class="font-sans text-[9px] tracking-[0.2em] uppercase font-bold text-[#0f5238] mb-2 block">{genreName}</span>
                 )}
                 <h3 class="font-serif text-base md:text-xl text-[#1C1917] mb-1">
-                  <a href={`/discover/${book.slug}`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
+                  <a href={`/discover/${book.slug}/`} class="hover:text-[#2d6a4f] transition-colors no-underline">{book.title}</a>
                 </h3>
                 <p class="font-sans text-xs text-[#404943] tracking-wider font-light">
                   {book.authorSlug ? (
-                    <a href={`/author/${book.authorSlug}`} class="hover:text-[#0f5238] transition-colors no-underline">{book.authorName}</a>
-                  ) : book.authorName}
+                    <a href={`/author/${book.authorSlug}/`} class="hover:text-[#0f5238] transition-colors no-underline">{book.authorName}</a>
+                  ) : (book.authorName ?? "")}
                   {year ? `, ${year}` : ""}
                 </p>
               </div>
